@@ -19,6 +19,10 @@ export class User {
   @Field()
   email: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  password: string;
+
   @AfterInsert()
   logInsert() {
     console.log(`Inserted user with id: '${this.id}'`);

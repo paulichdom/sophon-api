@@ -25,4 +25,5 @@ input UpdateUserInput {
 type User {
   email: String!
   id: Int!
+  password: String
 }
