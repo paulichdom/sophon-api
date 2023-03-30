@@ -19,9 +19,21 @@ export class User {
   @Field()
   email: string;
 
+  @Column()
+  @Field()
+  password: string;
+
   @Column({ nullable: true })
   @Field({ nullable: true })
-  password: string;
+  bio: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  image: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  token: string;
 
   @AfterInsert()
   logInsert() {

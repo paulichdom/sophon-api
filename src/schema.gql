@@ -3,7 +3,10 @@
 # ------------------------------------------------------
 
 input CreateUserInput {
+  bio: String
   email: String!
+  image: String
+  password: String!
 }
 
 type Mutation {
@@ -18,12 +21,18 @@ type Query {
 }
 
 input UpdateUserInput {
+  bio: String
   email: String
   id: Int!
+  image: String
+  password: String
 }
 
 type User {
+  bio: String
   email: String!
   id: Int!
-  password: String
+  image: String
+  password: String!
+  token: String
 }
