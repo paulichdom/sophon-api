@@ -17,6 +17,10 @@ export class User {
 
   @Column()
   @Field()
+  username: string;
+
+  @Column()
+  @Field()
   email: string;
 
   @Column()

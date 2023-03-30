@@ -35,4 +35,5 @@ type User {
   image: String
   password: String!
   token: String
+  username: String!
 }
