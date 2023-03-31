@@ -17,9 +17,9 @@ export class CreateUserInput {
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  bio: string;
+  bio?: string;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  image: string;
+  image?: string;
 }

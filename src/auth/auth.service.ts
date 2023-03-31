@@ -1,26 +1,37 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthInput } from './dto/create-auth.input';
-import { UpdateAuthInput } from './dto/update-auth.input';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { UserService } from 'src/user/user.service';
+import { randomBytes, scrypt as _scrypt } from 'crypto';
+import { promisify } from 'util';
+import { SignUpInput } from './dto/sign-up.input';
+
+const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
-  create(createAuthInput: CreateAuthInput) {
-    return 'This action adds a new auth';
+  constructor(private usersService: UserService) {}
+
+  async signup(signUpInput: SignUpInput) {
+    const { email, password, username } = signUpInput;
+
+    const users = await this.usersService.find(email);
+    if (users.length) {
+      throw new BadRequestException('email in use');
+    }
+
+    const salt = randomBytes(8).toString('hex');
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+    const result = salt + '.' + hash.toString('hex');
+
+    const user = await this.usersService.create({
+      email,
+      password: result,
+      username,
+    });
+
+    return user;
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthInput: UpdateAuthInput) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  signin() {
+    return null;
   }
 }
