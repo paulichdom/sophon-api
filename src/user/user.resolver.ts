@@ -3,7 +3,11 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { NotFoundException } from '@nestjs/common';
+import {
+  NotFoundException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -19,6 +23,7 @@ export class UserResolver {
     return this.userService.findAll();
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Query(() => User, { name: 'user' })
   async findUser(@Args('id', { type: () => Int }) id: number) {
     const user = await this.userService.findOne(id);

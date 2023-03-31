@@ -5,6 +5,10 @@ import { Column } from 'typeorm';
 export class CreateUserInput {
   @Column()
   @Field()
+  username: string;
+
+  @Column()
+  @Field()
   email: string;
 
   @Column()

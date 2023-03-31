@@ -7,7 +7,7 @@ import {
   AfterRemove,
 } from 'typeorm';
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-
+import { Exclude } from 'class-transformer';
 @Entity()
 @ObjectType()
 export class User {
@@ -24,7 +24,7 @@ export class User {
   email: string;
 
   @Column()
-  @Field()
+  @Exclude()
   password: string;
 
   @Column({ nullable: true })
