@@ -18,8 +18,8 @@ type Mutation {
 }
 
 type Query {
+  getCurrentUser: User!
   signInUser(signInInput: SignInInput!): User!
-  testAuthToken: Int!
   user(id: Int!): User!
   users: [User!]!
 }

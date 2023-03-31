@@ -1,7 +1,5 @@
-import { Session, UseGuards } from '@nestjs/common';
-import { Resolver, Mutation, Args, Query, Context, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { User } from 'src/user/entities/user.entity';
-import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { SignInInput } from './dto/sign-in.input';
 import { SignUpInput } from './dto/sign-up.input';
@@ -21,11 +19,5 @@ export class AuthResolver {
   async signInUser(@Args('signInInput') signInInput: SignInInput) {
     const user = await this.authService.signIn(signInInput);
     return user;
-  }
-
-  @UseGuards(AuthGuard)
-  @Query(() => Int)
-  async testAuthToken() {
-    return 42;
   }
 }
