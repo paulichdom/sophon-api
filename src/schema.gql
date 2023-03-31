@@ -18,8 +18,15 @@ type Mutation {
 }
 
 type Query {
+  signInUser(signInInput: SignInInput!): User!
   user(id: Int!): User!
   users: [User!]!
+}
+
+input SignInInput {
+  email: String
+  password: String
+  username: String
 }
 
 input SignUpInput {
