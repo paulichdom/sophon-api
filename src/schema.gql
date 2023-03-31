@@ -19,6 +19,7 @@ type Mutation {
 
 type Query {
   signInUser(signInInput: SignInInput!): User!
+  testAuthToken: Int!
   user(id: Int!): User!
   users: [User!]!
 }

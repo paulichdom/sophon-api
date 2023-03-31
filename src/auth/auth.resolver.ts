@@ -1,5 +1,7 @@
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { Session, UseGuards } from '@nestjs/common';
+import { Resolver, Mutation, Args, Query, Context, Int } from '@nestjs/graphql';
 import { User } from 'src/user/entities/user.entity';
+import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { SignInInput } from './dto/sign-in.input';
 import { SignUpInput } from './dto/sign-up.input';
@@ -10,12 +12,20 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => User)
-  signUpUser(@Args('signUpInput') signUpInput: SignUpInput) {
-    return this.authService.signUp(signUpInput);
+  async signUpUser(@Args('signUpInput') signUpInput: SignUpInput) {
+    const user = await this.authService.signUp(signUpInput);
+    return user;
   }
 
   @Query(() => User)
-  signInUser(@Args('signInInput') signInInput: SignInInput) {
-    return this.authService.signIn(signInInput);
+  async signInUser(@Args('signInInput') signInInput: SignInInput) {
+    const user = await this.authService.signIn(signInInput);
+    return user;
+  }
+
+  @UseGuards(AuthGuard)
+  @Query(() => Int)
+  async testAuthToken() {
+    return 42;
   }
 }

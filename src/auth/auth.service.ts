@@ -1,20 +1,24 @@
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { SignUpInput } from './dto/sign-up.input';
 import { SignInInput } from './dto/sign-in.input';
+import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UserService) {}
+  constructor(
+    private usersService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
   async signUp(signUpInput: SignUpInput) {
     const { email, password, username } = signUpInput;
@@ -49,8 +53,11 @@ export class AuthService {
     const hash = (await scrypt(password, salt, 32)) as Buffer;
 
     if (storedHash !== hash.toString('hex')) {
-      throw new ForbiddenException('invalid credentials');
+      throw new UnauthorizedException('invalid credentials');
     }
+
+    const payload = { username: user.username, sub: user.id };
+    user.token = await this.jwtService.signAsync(payload);
 
     return user;
   }
