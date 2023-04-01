@@ -7,8 +7,8 @@ import {
 import { UserService } from 'src/user/user.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { SignUpInput } from './dto/sign-up.input';
 import { SignInInput } from './dto/sign-in.input';
+import { LogInInput } from './dto/log-in.input';
 import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_scrypt);
@@ -20,8 +20,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signUpInput: SignUpInput) {
-    const { email, password, username } = signUpInput;
+  async signIn(signInInput: SignInInput) {
+    const { email, password, username } = signInInput;
 
     const users = await this.usersService.find(email);
     if (users.length) {
@@ -41,8 +41,8 @@ export class AuthService {
     return user;
   }
 
-  async signIn(signInInput: SignInInput) {
-    const { email, password } = signInInput;
+  async logIn(logInInput: LogInInput) {
+    const { email, password } = logInInput;
     const [user] = await this.usersService.find(email);
 
     if (!user) {

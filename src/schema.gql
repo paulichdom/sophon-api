@@ -10,27 +10,26 @@ input CreateUserInput {
   username: String!
 }
 
+input LogInInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   removeUser(id: Int!): User!
-  signUpUser(signUpInput: SignUpInput!): User!
+  signInUser(signInInput: SignInInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
   getCurrentUser: User!
-  signInUser(signInInput: SignInInput!): User!
+  logInUser(logInInput: LogInInput!): User!
   user(id: Int!): User!
   users: [User!]!
 }
 
 input SignInInput {
-  email: String
-  password: String
-  username: String
-}
-
-input SignUpInput {
   email: String!
   password: String!
   username: String!

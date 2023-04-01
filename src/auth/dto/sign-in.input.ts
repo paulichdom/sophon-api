@@ -1,5 +1,13 @@
-import { SignUpInput } from './sign-up.input';
-import { InputType, PartialType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class SignInInput extends PartialType(SignUpInput) {}
+export class SignInInput {
+  @Field()
+  username: string;
+
+  @Field()
+  email: string;
+
+  @Field()
+  password: string;
+}
