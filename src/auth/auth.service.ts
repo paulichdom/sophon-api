@@ -10,6 +10,7 @@ import { promisify } from 'util';
 import { SignInInput } from './dto/sign-in.input';
 import { LogInInput } from './dto/log-in.input';
 import { JwtService } from '@nestjs/jwt';
+import { RedisService } from '@liaoliaots/nestjs-redis';
 
 const scrypt = promisify(_scrypt);
 
@@ -18,6 +19,7 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
+    private redisService: RedisService,
   ) {}
 
   async signIn(signInInput: SignInInput) {
@@ -60,5 +62,26 @@ export class AuthService {
     user.token = await this.jwtService.signAsync(payload);
 
     return user;
+  }
+
+  async invalidateToken(authToken: string) {
+    const token = authToken.split(' ')[1];
+
+    try {
+      const client = this.redisService.getClient();
+      await client.set(`revoked:${token}`, 'true', 'EX', 60 * 60 * 24);
+      // the token is set to expire in 24 hours;
+    } catch (error) {
+      throw new Error(`Failed to invalidate token: ${error.message}`);
+    }
+
+    return true;
+  }
+
+  async isTokenRevoked(token: string): Promise<boolean> {
+    const client = this.redisService.getClient();
+    const result = await client.get(`revoked:${token}`);
+
+    return result === 'true';
   }
 }

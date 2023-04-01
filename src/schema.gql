@@ -17,6 +17,7 @@ input LogInInput {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  logOutUser: String!
   removeUser(id: Int!): User!
   signInUser(signInInput: SignInInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!

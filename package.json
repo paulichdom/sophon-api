@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@apollo/server": "^4.5.0",
+    "@liaoliaots/nestjs-redis": "^9.0.5",
     "@nestjs/apollo": "^11.0.4",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
@@ -32,6 +33,7 @@
     "class-transformer": "^0.5.1",
     "cross-env": "^7.0.3",
     "graphql": "^16.6.0",
+    "ioredis": "^5.3.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "sqlite3": "^5.1.6",

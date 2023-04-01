@@ -31,6 +31,13 @@
 ```bash
 $ npm install
 ```
+## Redis server
+
+Run redis server before starting the app
+
+```bash
+$ redis-server
+```
 
 ## Running the app
 
