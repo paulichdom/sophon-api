@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
     }),
     UserModule,
     AuthModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
