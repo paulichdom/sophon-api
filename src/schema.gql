@@ -2,6 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Article {
+  description: String!
+  id: Int!
+  slug: String!
+  title: String!
+}
+
+input CreateArticleInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateTagInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 input CreateUserInput {
   bio: String
   email: String!
@@ -16,16 +33,24 @@ input LogInInput {
 }
 
 type Mutation {
+  createArticle(createArticleInput: CreateArticleInput!): Article!
+  createTag(createTagInput: CreateTagInput!): Tag!
   createUser(createUserInput: CreateUserInput!): User!
   logOutUser: String!
+  removeArticle(id: Int!): Article!
+  removeTag(id: Int!): Tag!
   removeUser(id: Int!): User!
   signInUser(signInInput: SignInInput!): User!
+  updateArticle(updateArticleInput: UpdateArticleInput!): Article!
+  updateTag(updateTagInput: UpdateTagInput!): Tag!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
+  article(id: Int!): Article!
   getCurrentUser: User!
   logInUser(logInInput: LogInInput!): User!
+  tag(id: Int!): Tag!
   user(id: Int!): User!
   users: [User!]!
 }
@@ -34,6 +59,23 @@ input SignInInput {
   email: String!
   password: String!
   username: String!
+}
+
+type Tag {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateArticleInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateTagInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input UpdateUserInput {
