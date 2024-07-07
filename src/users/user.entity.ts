@@ -10,19 +10,19 @@ export class User {
   @Column()
   username: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
 
-  @Column()
-  token: string;
+  @Column({ nullable: true, default: null })
+  token: string | null;
 
-  @Column()
-  bio: string;
+  @Column({ nullable: true, default: null })
+  bio: string | null;
 
-  @Column()
+  @Column({ nullable: true, default: null })
   image: string | null;
 
   @OneToMany((_type) => Article, (article) => article.author)
