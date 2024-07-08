@@ -10,9 +10,12 @@ export class CreateUserDto {
   @IsString()
   password: string;
 
+  @IsString()
   token?: string;
 
+  @IsString()
   bio?: string;
 
+  @IsString()
   image?: string;
 }
