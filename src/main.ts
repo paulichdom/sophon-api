@@ -9,6 +9,7 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       skipMissingProperties: true,
+      enableDebugMessages: true,
     }),
   );
   await app.listen(3000);
