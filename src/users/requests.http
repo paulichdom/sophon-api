@@ -3,9 +3,9 @@ POST http://localhost:3000/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "Newman",
-  "email": "newman.man@man.com",
-  "password": "pass"
+  "username": "Oldman Gary",
+  "email": "oldman.gary@sophon.com",
+  "password": "shouldBeHa5h3d"
 }
 
 ### Find a particular user with a given ID
