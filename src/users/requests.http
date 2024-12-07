@@ -1,9 +1,18 @@
-### Create a new user
-POST http://localhost:3000/api/v1/users/signup
+### Register a new user
+POST http://localhost:3000/api/v1/users/register
 Content-Type: application/json
 
 {
   "username": "Oldman Gary",
+  "email": "oldman.gary@sophon.com",
+  "password": "shouldBeHa5h3d"
+}
+
+### Authenticate user
+POST http://localhost:3000/api/v1/users/login
+Content-Type: application/json
+
+{
   "email": "oldman.gary@sophon.com",
   "password": "shouldBeHa5h3d"
 }

@@ -24,10 +24,16 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
-  @Post('/signup')
+  @Post('/register')
   createUser(@Body() body: CreateUserDto) {
     const { username, email, password } = body;
-    return this.authService.signup(username, email, password);
+    return this.authService.register(username, email, password);
+  }
+
+  @Post('/login')
+  login(@Body() body: CreateUserDto) {
+    const { email, password } = body;
+    return this.authService.login(email, password);
   }
 
   @Get('/:id')
