@@ -3,13 +3,13 @@ POST http://localhost:3000/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "Doppelganger",
-  "email": "double.trouble@testing.com",
-  "password": "VeRYSTRONGpass"
+  "username": "Newman",
+  "email": "newman.man@man.com",
+  "password": "pass"
 }
 
 ### Find a particular user with a given ID
-GET http://localhost:3000/api/v1/users/1
+GET http://localhost:3000/api/v1/users/2
 ### Find all users with a given email
 GET http://localhost:3000/api/v1/users?email=example@testing.com
 
