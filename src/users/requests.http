@@ -3,9 +3,9 @@ POST http://localhost:3000/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "Oldman Gary",
-  "email": "oldman.gary@sophon.com",
-  "password": "shouldBeHa5h3d"
+  "username": "Cookie Monster",
+  "email": "cookie-monster@sophon.com",
+  "password": "pa55ntM4tt3r"
 }
 
 ### Authenticate user
@@ -13,8 +13,8 @@ POST http://localhost:3000/api/v1/users/login
 Content-Type: application/json
 
 {
-  "email": "oldman.gary@sophon.com",
-  "password": "shouldBeHa5h3d"
+  "email": "cookie-monster@sophon.com",
+  "password": "pa55ntM4tt3r"
 }
 
 ### Find a particular user with a given ID
@@ -32,3 +32,4 @@ content-type: application/json
 {
   "email": "update-second-time@testing.com"
 }
+
