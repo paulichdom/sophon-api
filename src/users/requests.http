@@ -20,6 +20,9 @@ Content-Type: application/json
 ### Get authenticated user
 GET http://localhost:3000/api/v1/users/whoami
 
+### Logout
+POST http://localhost:3000/api/v1/users/logout
+
 ### Find a particular user with a given ID
 GET http://localhost:3000/api/v1/users/2
 ### Find all users with a given email
