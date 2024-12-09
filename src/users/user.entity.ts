@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Article } from 'src/articles/article.entity';
+import { Article } from '../articles/article.entity';
 import {
   AfterInsert,
   AfterRemove,
