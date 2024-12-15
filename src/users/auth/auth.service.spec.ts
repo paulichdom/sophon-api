@@ -63,15 +63,7 @@ describe('AuthService', () => {
   });
 
   it('throws an error if user signs up with email that is already in use', async () => {
-    usersServiceMock.find = () =>
-      Promise.resolve([
-        {
-          id: 1,
-          username: usernameMock,
-          email: emailMock,
-          password: passwordMock,
-        } as User,
-      ]);
+    await service.register(usernameMock, emailMock, passwordMock);
 
     await expect(
       service.register(usernameMock, emailMock, passwordMock),
@@ -85,10 +77,9 @@ describe('AuthService', () => {
   });
 
   it('throws error if an invalid password is provided', async () => {
-    usersServiceMock.find = () =>
-      Promise.resolve([{ email: emailMock, password: passwordMock } as User]);
+    await service.register(usernameMock, emailMock, passwordMock);
 
-    await expect(service.login(emailMock, 'wrongPassword')).rejects.toThrow(
+    await expect(service.login(emailMock, 'invalidPassword')).rejects.toThrow(
       BadRequestException,
     );
   });
