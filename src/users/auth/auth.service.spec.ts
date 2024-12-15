@@ -11,13 +11,25 @@ describe('AuthService', () => {
   let usernameMock: string;
   let emailMock: string;
   let passwordMock: string;
-  let hashedPasswordMock: string;
 
   beforeEach(async () => {
+    const users: User[] = [];
     usersServiceMock = {
-      find: () => Promise.resolve([]),
-      create: (username: string, email: string, password: string) =>
-        Promise.resolve({ id: 1, username, email, password } as User),
+      find: (email: string) => {
+        const filteredUsers = users.filter((user) => user.email === email);
+        return Promise.resolve(filteredUsers);
+      },
+      create: (username: string, email: string, password: string) => {
+        const user = {
+          id: Math.floor(Math.random() * 999999),
+          username,
+          email,
+          password,
+        } as User;
+
+        users.push(user);
+        return Promise.resolve(user);
+      },
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -33,8 +45,6 @@ describe('AuthService', () => {
     usernameMock = 'Joe';
     emailMock = 'joe@work.com';
     passwordMock = 'joeMakesP4ssw0rd';
-    hashedPasswordMock =
-      '85b2c83da50ebb2e.c061313b9af75ccd2b6082ce9d6e7549d33e2eab9d198ddb10793c3c381d833d';
 
     service = module.get<AuthService>(AuthService);
   });
@@ -84,10 +94,7 @@ describe('AuthService', () => {
   });
 
   it('returns a user if correct password is provided', async () => {
-    usersServiceMock.find = () =>
-      Promise.resolve([
-        { email: emailMock, password: hashedPasswordMock } as User,
-      ]);
+    await service.register(usernameMock, emailMock, passwordMock);
 
     const user = await service.login(emailMock, passwordMock);
     expect(user).toBeDefined();
