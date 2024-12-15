@@ -2,12 +2,18 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users.service';
 import { User } from '../user.entity';
+import { BadRequestException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let service: AuthService;
+  let usersServiceMock: Partial<UsersService>;
+
+  let usernameMock: string;
+  let emailMock: string;
+  let passwordMock: string;
 
   beforeEach(async () => {
-    const usersServiceMock: Partial<UsersService> = {
+    usersServiceMock = {
       find: () => Promise.resolve([]),
       create: (email: string, password: string) =>
         Promise.resolve({ id: 1, email, password } as User),
@@ -23,6 +29,10 @@ describe('AuthService', () => {
       ],
     }).compile();
 
+    usernameMock = 'Joe';
+    emailMock = 'joe@work.com';
+    passwordMock = 'joeMakesP4ssw0rd';
+
     service = module.get<AuthService>(AuthService);
   });
 
@@ -31,15 +41,27 @@ describe('AuthService', () => {
   });
 
   it('creates a new user with a salted and hashed password', async () => {
-    const usenameMock = 'Joe';
-    const emalMock = 'joe@work.com';
-    const passwordMock = 'joeMakesP4ssw0rd';
-
-    const user = await service.register(usenameMock, emalMock, passwordMock);
+    const user = await service.register(usernameMock, emailMock, passwordMock);
     expect(user.password).not.toEqual(passwordMock);
 
     const [salt, hash] = user.password.split('.');
     expect(salt).toBeDefined();
     expect(hash).toBeDefined();
+  });
+
+  it('throws an error if user signs up with email that is already in use', async () => {
+    usersServiceMock.find = () =>
+      Promise.resolve([
+        {
+          id: 1,
+          username: usernameMock,
+          email: emailMock,
+          password: passwordMock,
+        } as User,
+      ]);
+
+    await expect(
+      service.register(usernameMock, emailMock, passwordMock),
+    ).rejects.toThrow(BadRequestException);
   });
 });
