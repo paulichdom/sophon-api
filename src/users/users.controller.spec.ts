@@ -29,13 +29,12 @@ describe('UsersController', () => {
           { id: 1, email, password: passwordMock } as User,
         ]);
       },
-      /* remove: () => {},
-      update: () => {}, */
     };
 
     authServiceMock = {
-      /* register: () => {},
-      login: () => {}, */
+      login: (email: string, password: string) => {
+        return Promise.resolve({ id: 1, email, password } as User);
+      },
     };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
@@ -73,5 +72,16 @@ describe('UsersController', () => {
     usersServiceMock.findOne = () => null;
 
     await expect(controller.findUser('1')).rejects.toThrow(NotFoundException);
+  });
+
+  it('login updates session object and returns user', async () => {
+    const session = { userId: -10 };
+    const user = await controller.login(
+      { email: emailMock, password: passwordMock },
+      session,
+    );
+
+    expect(user.id).toEqual(1);
+    expect(session.userId).toEqual(1);
   });
 });
