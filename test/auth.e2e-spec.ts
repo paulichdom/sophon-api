@@ -18,10 +18,10 @@ describe('Authentication System', () => {
   it('handles a register request', () => {
     const user = {
       name: "Moist Von Lipvig",
-      email: "moist-lipvig@sophon.com",
+      email: "moist-lipvig1@sophon.com",
       password: "t35tp455F0rM3"
     }
-    
+
     return request(app.getHttpServer())
       .post('/users/register')
       .send({
