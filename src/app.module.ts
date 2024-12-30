@@ -9,6 +9,7 @@ import { User } from './users/user.entity';
 import { ArticlesModule } from './articles/articles.module';
 import { Article } from './articles/article.entity';
 import { ReportsModule } from './reports/reports.module';
+import { Report } from './reports/entities/report.entity';
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -24,7 +25,7 @@ const cookieSession = require('cookie-session');
           type: 'sqlite',
           database: config.get<string>('DB_NAME'),
           synchronize: true,
-          entities: [User, Article]
+          entities: [User, Article, Report]
         }
       }
     }),
