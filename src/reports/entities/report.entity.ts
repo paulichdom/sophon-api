@@ -11,15 +11,15 @@ export class Report {
   @Column()
   make: string;
 
-   @Column()
-   year: number;
+  @Column()
+  year: number;
 
-   @Column()
-   lng: number;
+  @Column()
+  lng: number;
 
-   @Column()
-   lat: number;
+  @Column()
+  lat: number;
 
-   @Column()
-   mileage: number;
+  @Column()
+  mileage: number;
 }
