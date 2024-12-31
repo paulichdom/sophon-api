@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Article } from '../articles/article.entity';
+import { Report } from 'src/reports/entities/report.entity';
 import {
   AfterInsert,
   AfterRemove,
@@ -35,6 +36,9 @@ export class User {
 
   @OneToMany((_type) => Article, (article) => article.author)
   articles: Article[];
+
+  @OneToMany(() => Report, (report) => report.user)
+  reports: Report[];
 
   @AfterInsert()
   logInsert() {
