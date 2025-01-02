@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import {Report} from './entities/report.entity'
+import { User } from 'src/users/user.entity';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
 
@@ -10,9 +11,9 @@ import { UpdateReportDto } from './dto/update-report.dto';
 export class ReportsService {
   constructor(@InjectRepository(Report) private repo: Repository<Report>) {}
 
-  create(createReportDto: CreateReportDto) {
+  create(createReportDto: CreateReportDto, user: User) {
     const report = this.repo.create(createReportDto);
-    
+    report.user = user;
     return this.repo.save(report);
   }
 

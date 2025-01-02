@@ -3,6 +3,8 @@ import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
+import { User } from 'src/users/user.entity';
 
 @Controller('reports')
 export class ReportsController {
@@ -10,8 +12,8 @@ export class ReportsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  create(@Body() createReportDto: CreateReportDto) {
-    return this.reportsService.create(createReportDto);
+  create(@Body() createReportDto: CreateReportDto, @CurrentUser() user: User) {
+    return this.reportsService.create(createReportDto, user);
   }
 
   @Get()
