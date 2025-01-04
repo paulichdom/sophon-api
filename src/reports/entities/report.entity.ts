@@ -7,7 +7,7 @@ export class Report {
   id: number;
 
   @Column({default: false})
-  approved: number;
+  approved: boolean;
 
   @Column()
   price: number;
