@@ -25,6 +25,10 @@ export class User {
   @Column()
   password: string;
 
+  // TODO: Default value for testing purposes. Remove on impl finish.
+  @Column({default: true})
+  admin: boolean;
+
   @Column({ nullable: true, default: null })
   token: string | null;
 
