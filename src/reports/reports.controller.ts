@@ -19,7 +19,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { GetEstimateDto } from './dto/get-etimate';
+import { GetEstimateDto } from './dto/get-estimate';
 
 @Controller('reports')
 export class ReportsController {
@@ -27,7 +27,7 @@ export class ReportsController {
 
   @Get()
   getEstimate(@Query() query: GetEstimateDto) {
-    console.log({query})
+    return this.reportsService.createEstimate(query)
   }
 
   @Post()

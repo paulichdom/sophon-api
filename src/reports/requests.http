@@ -3,8 +3,8 @@ POST http://localhost:3000/api/v1/reports
 content-type: application/json
 
 {
-  "make": "toyota",
-  "model": "corolla",
+  "make": "ford",
+  "model": "fiesta",
   "year": 1980,
   "mileage": 100000,
   "lng": 0,
@@ -21,4 +21,4 @@ content-type: application/json
 }
 
 ### Get an estimate for existing vehicle
-GET http://localhost:3000/api/v1/reports?make=toyota&model=corolla&lng=0&lat=0&mileage=2000&year=1980
+GET http://localhost:3000/api/v1/reports?make=ford&model=fiesta&lng=0&lat=0&mileage=2000&year=1980

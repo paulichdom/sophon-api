@@ -6,10 +6,18 @@ import {Report} from './entities/report.entity'
 import { User } from 'src/users/user.entity';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
+import { GetEstimateDto } from './dto/get-estimate';
 
 @Injectable()
 export class ReportsService {
   constructor(@InjectRepository(Report) private repo: Repository<Report>) {}
+
+  createEstimate(estimateDto: GetEstimateDto) {
+    return this.repo.createQueryBuilder()
+    .select('*')
+    .where('make = :make', {make: estimateDto.make})
+    .getRawMany()
+  }
 
   create(createReportDto: CreateReportDto, user: User) {
     const report = this.repo.create(createReportDto);
