@@ -13,9 +13,12 @@ content-type: application/json
 }
 
 ### Approve an existing report
-PATCH http://localhost:3000/api/v1/reports/11
+PATCH http://localhost:3000/api/v1/reports/12
 content-type: application/json
 
 {
   "approved": true
 }
+
+### Get an estimate for existing vehicle
+GET http://localhost:3000/api/v1/reports?make=toyota&model=corolla&lng=0&lat=0&mileage=2000&year=1980
