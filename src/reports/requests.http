@@ -4,12 +4,12 @@ content-type: application/json
 
 {
   "make": "ford",
-  "model": "fiesta",
+  "model": "mustang",
   "year": 1980,
-  "mileage": 100000,
-  "lng": 0,
-  "lat": 0,
-  "price": 500000
+  "mileage": 50000,
+  "lng": 45,
+  "lat": 45,
+  "price": 10000
 }
 
 ### Approve an existing report
@@ -21,4 +21,4 @@ content-type: application/json
 }
 
 ### Get an estimate for existing vehicle
-GET http://localhost:3000/api/v1/reports?make=ford&model=fiesta&lng=0&lat=0&mileage=2000&year=1980
+GET http://localhost:3000/api/v1/reports?make=ford&model=mustang&lng=45&lat=45&mileage=2000&year=1981
