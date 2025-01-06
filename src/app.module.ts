@@ -48,12 +48,16 @@ const cookieSession = require('cookie-session');
 })
 
 export class AppModule {
+  constructor(
+    private configService: ConfigService
+  ) {}
+
   configure(consumer: MiddlewareConsumer) {
     // Session middleware configured through NestJS middleware system
     // Located in AppModule for proper DI integration and middleware lifecycle management
     consumer.apply(
       cookieSession({
-        keys: [process.env.COOKIE_KEY || 'development-key-only'],
+        keys: [this.configService.get('COOKIE_KEY')],
       }),
     )
     .forRoutes('*')
