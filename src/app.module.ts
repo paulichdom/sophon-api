@@ -8,7 +8,7 @@ import {ConfigModule, ConfigService} from '@nestjs/config'
 import { UsersModule } from './users/users.module';
 import { ArticlesModule } from './articles/articles.module';
 import { ReportsModule } from './reports/reports.module';
-import { dataSourceOptions } from '../db/data-source';
+import { TypeOrmConfigService } from './config/typeorm.config';
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -17,7 +17,9 @@ const cookieSession = require('cookie-session');
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`
     }),
-    TypeOrmModule.forRoot(dataSourceOptions),
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService
+    }),
     UsersModule,
     ArticlesModule,
     ReportsModule,
