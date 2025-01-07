@@ -3,8 +3,8 @@ POST http://localhost:3000/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "Miss Admin",
-  "email": "miss-admin@sophon.com",
+  "username": "After Config",
+  "email": "after-config@sophon.com",
   "password": "pa55ntM4tt3r"
 }
 
