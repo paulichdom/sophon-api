@@ -1,17 +1,15 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
-import {APP_PIPE} from '@nestjs/core'
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {APP_PIPE} from '@nestjs/core'
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {ConfigModule, ConfigService} from '@nestjs/config'
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
 import { ArticlesModule } from './articles/articles.module';
-import { Article } from './articles/article.entity';
 import { ReportsModule } from './reports/reports.module';
-import { Report } from './reports/entities/report.entity';
+import { dataSourceOptions } from 'db/data-source';
 const cookieSession = require('cookie-session');
-const dbConfig = require('../ormconfig.js');
 
 @Module({
   imports: [
@@ -19,7 +17,7 @@ const dbConfig = require('../ormconfig.js');
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`
     }),
-    TypeOrmModule.forRoot(dbConfig),
+    TypeOrmModule.forRoot(dataSourceOptions),
     UsersModule,
     ArticlesModule,
     ReportsModule,
