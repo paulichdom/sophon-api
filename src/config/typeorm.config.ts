@@ -18,6 +18,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       synchronize: isTest || isDev,
       migrationsRun: isTest,
       keepConnectionAlive: isTest,
+      
     };
 
     if (!isProd) {
@@ -27,7 +28,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     return {
       ...baseConfig,
       type: 'postgres',
-      url: this.configService.get('DATABASE_URL'),
+      host: this.configService.get('DB_HOST'),
+      port: this.configService.get('DB_PORT'),
+      username: this.configService.get('DB_USERNAME'),
+      password: this.configService.get('DB_PASSWORD'),
+      ssl: {
+        rejectUnauthorized: false
+      }
     };
   }
 }
