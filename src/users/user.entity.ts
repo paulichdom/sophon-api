@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Article } from '../articles/article.entity';
-import { Report } from 'src/reports/entities/report.entity';
+import { Report } from '../reports/entities/report.entity';
 import {
   AfterInsert,
   AfterRemove,

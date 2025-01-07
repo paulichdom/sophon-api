@@ -20,7 +20,8 @@ switch (process.env.NODE_ENV) {
       type: 'sqlite',
       database: 'test-db.sqlite',
       entities: ['**/*.entity.ts'],
-      migrationsRun: true
+      migrationsRun: true,
+      synchronize: true
     });
     break;
   case 'production':

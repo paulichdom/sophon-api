@@ -8,7 +8,7 @@ import {ConfigModule, ConfigService} from '@nestjs/config'
 import { UsersModule } from './users/users.module';
 import { ArticlesModule } from './articles/articles.module';
 import { ReportsModule } from './reports/reports.module';
-import { dataSourceOptions } from 'db/data-source';
+import { dataSourceOptions } from '../db/data-source';
 const cookieSession = require('cookie-session');
 
 @Module({
