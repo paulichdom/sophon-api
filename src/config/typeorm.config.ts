@@ -11,12 +11,18 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     const isDev = this.configService.get('NODE_ENV') === 'development';
     const isProd = this.configService.get('NODE_ENV') === 'production';
 
+    const migrationsRun = isTest || isProd;
+    const migrationsPath = 'src/database';
+
     const baseConfig: TypeOrmModuleOptions = {
       type: 'sqlite',
       database: this.configService.get('DB_NAME'),
       autoLoadEntities: true,
       synchronize: isTest || isDev,
-      migrationsRun: isTest,
+      migrationsRun: migrationsRun,
+      migrations: migrationsRun
+        ? [process.cwd() + `/${migrationsPath}/migrations/*{.js,.ts}`]
+        : [],
       keepConnectionAlive: isTest,
       
     };
