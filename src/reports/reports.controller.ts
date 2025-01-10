@@ -10,7 +10,7 @@ import {
   Query
 } from '@nestjs/common';
 
-import { User } from '../users/user.entity';
+import { User } from '../users/entities/user.entity';
 import { ReportDto } from './dto/report.dto';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';

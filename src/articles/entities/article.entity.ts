@@ -1,5 +1,6 @@
-import { User } from "src/users/user.entity";
+
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
 
 @Entity()
 export class Article {
