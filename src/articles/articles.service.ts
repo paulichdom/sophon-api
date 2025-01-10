@@ -1,11 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { Article } from './entities/article.entity';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class ArticlesService {
-  create(createArticleDto: CreateArticleDto) {
-    return 'This action adds a new article';
+  constructor(@InjectRepository(Article) private repo: Repository<Article>) {}
+
+  async create(createArticleDto: CreateArticleDto, user: User) {
+    const article = this.repo.create({
+      ...createArticleDto,
+      author: user,
+      slug: this.slugify(createArticleDto.title)
+    });
+
+    return this.repo.save(article);
   }
 
   findAll() {
@@ -23,4 +36,15 @@ export class ArticlesService {
   remove(id: number) {
     return `This action removes a #${id} article`;
   }
+
+  slugify (input: string) {
+    return input
+      .toLowerCase()
+      .normalize('NFD') 
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .replace(/[\s_]+/g, '-')
+      .replace(/[^\w-]+/g, '')
+      .slice(0, 50);
+  };
 }

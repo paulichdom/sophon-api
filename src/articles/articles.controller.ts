@@ -1,15 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { ArticleDto } from './dto/article.dto';
+import { User } from 'src/users/user.entity';
 
 @Controller('articles')
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Post()
-  createArticle(@Body() createArticleDto: CreateArticleDto) {
-    return this.articlesService.create(createArticleDto);
+  @UseGuards(AuthGuard)
+  @Serialize(ArticleDto)
+  createArticle(@Body() createArticleDto: CreateArticleDto, @CurrentUser() user: User) {
+    return this.articlesService.create(createArticleDto, user);
   }
 
   @Get()

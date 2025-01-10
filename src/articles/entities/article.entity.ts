@@ -18,16 +18,16 @@ export class Article {
   @Column()
   body: string;
 
-  @Column('simple-array')
-  taglist: string[]
+  @Column('simple-array', {default: ''})
+  taglist: string[];
 
-  @Column()
+  @Column({default: false})
   favorited: boolean;
 
-  @Column()
+  @Column({default: 0})
   favoritesCount: number;
 
-  @ManyToOne((_type) => User, (user) => user.articles)
+  @ManyToOne(() => User, (user) => user.articles)
   author: User;
 
   @CreateDateColumn()
@@ -37,7 +37,7 @@ export class Article {
   updatedAt: Date;
 
   @VersionColumn()
-  vesrion: number;
+  version: number;
 
   
 }

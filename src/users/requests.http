@@ -3,8 +3,8 @@ POST http://localhost:3000/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "After Config",
-  "email": "after-config@sophon.com",
+  "username": "Newman Nexdoor",
+  "email": "newman-nextoor@sophon.com",
   "password": "pa55ntM4tt3r"
 }
 
@@ -13,7 +13,7 @@ POST http://localhost:3000/api/v1/users/login
 Content-Type: application/json
 
 {
-  "email": "cookie-monster@sophon.com",
+  "email": "newman-nextoor@sophon.com",
   "password": "pa55ntM4tt3r"
 }
 

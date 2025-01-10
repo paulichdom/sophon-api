@@ -26,7 +26,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({default: false})
   admin: boolean;
 
   @Column({ nullable: true, default: null })
@@ -38,7 +38,7 @@ export class User {
   @Column({ nullable: true, default: null })
   image: string | null;
 
-  @OneToMany((_type) => Article, (article) => article.author)
+  @OneToMany(() => Article, (article) => article.author)
   articles: Article[];
 
   @OneToMany(() => Report, (report) => report.user)
