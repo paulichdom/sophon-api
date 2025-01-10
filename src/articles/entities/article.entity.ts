@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { User } from '../users/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from "src/users/user.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
 
 @Entity()
 export class Article {
@@ -20,13 +19,7 @@ export class Article {
   body: string;
 
   @Column('simple-array')
-  taglist: string[];
-
-  @Column()
-  createdAt: string;
-
-  @Column()
-  updatedAt: string;
+  taglist: string[]
 
   @Column()
   favorited: boolean;
@@ -36,4 +29,15 @@ export class Article {
 
   @ManyToOne((_type) => User, (user) => user.articles)
   author: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @VersionColumn()
+  vesrion: number;
+
+  
 }

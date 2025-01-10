@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Article } from '../articles/article.entity';
+
+import { Article } from 'src/articles/entities/article.entity';
 import { Report } from '../reports/entities/report.entity';
 import {
   AfterInsert,
@@ -25,8 +26,7 @@ export class User {
   @Column()
   password: string;
 
-  // TODO: Default value for testing purposes. Remove on impl finish.
-  @Column({default: true})
+  @Column()
   admin: boolean;
 
   @Column({ nullable: true, default: null })
