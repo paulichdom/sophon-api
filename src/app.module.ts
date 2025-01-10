@@ -9,7 +9,6 @@ import { UsersModule } from './users/users.module';
 import { ArticlesModule } from './articles/articles.module';
 import { ReportsModule } from './reports/reports.module';
 import { TypeOrmConfigService } from './config/typeorm.config';
-import { ArticlesModule } from './articles/articles.module';
 const cookieSession = require('cookie-session');
 
 @Module({
