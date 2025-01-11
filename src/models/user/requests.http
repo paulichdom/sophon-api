@@ -3,8 +3,8 @@ POST http://localhost:3000/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "Flem Org",
-  "email": "flem-org@sophon.com",
+  "username": "Change Chong",
+  "email": "change-chong@sophon.com",
   "password": "pa55ntM4tt3r"
 }
 

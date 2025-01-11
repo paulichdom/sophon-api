@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 
 import { AuthGuard } from '../../common/guards/auth.guard';
 import { Serialize } from '../../common/interceptors/serialize.interceptor';
-import { ArticlesService } from './articles.service';
+import { ArticleService } from './article.service';
 import { User } from '../user/entities/user.entity';
 import { ArticleDto } from './dto/article.dto';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -12,7 +12,7 @@ import { CurrentUser } from '../user/decorators/current-user.decorator';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticlesService) {}
+  constructor(private readonly articlesService: ArticleService) {}
 
   @Post()
   @UseGuards(AuthGuard)

@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from "@nestjs/common";
 import { NextFunction, Request, Response } from "express";
 
-import { UsersService } from "../users.service";
+import { UserService } from "../user.service";
 import { User } from "../entities/user.entity";
 
 declare global {
@@ -15,7 +15,7 @@ declare global {
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {
   constructor(
-    private usersService: UsersService
+    private usersService: UserService
   ){}
 
   async use(req: Request, res: Response, next: NextFunction) {

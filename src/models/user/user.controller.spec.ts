@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 import { AuthService } from '../../auth/auth.service';
 import { User } from './entities/user.entity';
 import { NotFoundException } from '@nestjs/common';
 
 describe('UsersController', () => {
-  let controller: UsersController;
-  let usersServiceMock: Partial<UsersService>;
+  let controller: UserController;
+  let usersServiceMock: Partial<UserService>;
   let authServiceMock: Partial<AuthService>;
 
   const usernameMock = 'Joe';
@@ -37,10 +37,10 @@ describe('UsersController', () => {
       },
     };
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [UsersController],
+      controllers: [UserController],
       providers: [
         {
-          provide: UsersService,
+          provide: UserService,
           useValue: usersServiceMock,
         },
         {
@@ -50,7 +50,7 @@ describe('UsersController', () => {
       ],
     }).compile();
 
-    controller = module.get<UsersController>(UsersController);
+    controller = module.get<UserController>(UserController);
   });
 
   it('should be defined', () => {

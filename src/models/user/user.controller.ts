@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Serialize } from '../../common/interceptors/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
@@ -23,9 +23,9 @@ import { AuthGuard } from '../../common/guards/auth.guard';
 
 @Controller('users')
 @Serialize(UserDto)
-export class UsersController {
+export class UserController {
   constructor(
-    private usersService: UsersService,
+    private usersService: UserService,
     private authService: AuthService,
   ) {}
 

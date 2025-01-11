@@ -5,10 +5,11 @@ import {APP_PIPE} from '@nestjs/core'
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {ConfigModule, ConfigService} from '@nestjs/config'
-import { UsersModule } from './models/user/users.module';
-import { ArticlesModule } from './models/article/articles.module';
+import { UserModule } from './models/user/user.module';
+import { ArticleModule } from './models/article/article.module';
 import { ReportsModule } from './models/report/reports.module';
 import { TypeOrmConfigService } from './config/typeorm.config';
+import { ProfileModule } from './models/profile/profile.module';
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -20,9 +21,10 @@ const cookieSession = require('cookie-session');
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService
     }),
-    UsersModule,
-    ArticlesModule,
+    UserModule,
+    ArticleModule,
     ReportsModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [

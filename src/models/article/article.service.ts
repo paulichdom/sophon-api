@@ -9,7 +9,7 @@ import { User } from '../user/entities/user.entity';
 
 
 @Injectable()
-export class ArticlesService {
+export class ArticleService {
   constructor(@InjectRepository(Article) private repo: Repository<Article>) {}
 
   async create(createArticleDto: CreateArticleDto, user: User) {
