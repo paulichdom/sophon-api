@@ -9,16 +9,13 @@ export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(ProfileEntity) private profileRepository: Repository<ProfileEntity>
-  ) {}
+  ) { }
 
   async create(username: string, email: string, password: string) {
     const user = this.userRepository.create({ email, password });
-    const savedUser = await this.userRepository.save(user);
+    user.profile = this.profileRepository.create({ username: username, user: user })
 
-    const profile = this.profileRepository.create({username: username, user: user})
-    await this.profileRepository.save(profile)
-
-    return savedUser;
+    return await this.userRepository.save(user);;
   }
 
   findOne(id: number) {

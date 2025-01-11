@@ -15,7 +15,6 @@ export class ProfileEntity {
   @Column({ nullable: true, default: null })
   image: string | null;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @OneToOne(() => User, (user) => user.profile)
   user: User;
 }

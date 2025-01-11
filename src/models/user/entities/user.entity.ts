@@ -9,6 +9,7 @@ import {
   AfterUpdate,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -25,13 +26,14 @@ export class User {
   @Column()
   password: string;
 
-  @Column({default: false})
+  @Column({ default: false })
   admin: boolean;
 
   @Column({ nullable: true, default: null })
   token: string | null;
 
-  @OneToOne(() => ProfileEntity)
+  @OneToOne(() => ProfileEntity, { cascade: true })
+  @JoinColumn()
   profile: ProfileEntity;
 
   @OneToMany(() => Article, (article) => article.author)

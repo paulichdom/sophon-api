@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
+import { ProfileDto } from 'src/models/profile/dto/profile.dto';
 
 export class UserDto {
   @Expose()
@@ -10,12 +11,15 @@ export class UserDto {
   @Expose()
   token: string;
 
+  @Transform(({ obj }) => obj.profile.username)
   @Expose()
   username: string;
 
+  @Transform(({ obj }) => obj.profile.bio)
   @Expose()
   bio: string;
 
+  @Transform(({ obj }) => obj.profile.image)
   @Expose()
   image: string;
 }

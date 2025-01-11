@@ -3,8 +3,8 @@ POST http://localhost:3000/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "Jimi Hendrix",
-  "email": "jimis-bridge@sophon.com",
+  "username": "Louis Armstrong",
+  "email": "louis-armstrong@sophon.com",
   "password": "pa55ntM4tt3r"
 }
 
