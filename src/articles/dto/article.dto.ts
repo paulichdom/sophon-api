@@ -1,4 +1,5 @@
-import { Expose, Transform } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
+import { UserProfileDto } from "src/users/dto/user-profile.dto";
 
 export class ArticleDto {
   @Expose()
@@ -15,6 +16,10 @@ export class ArticleDto {
 
   @Expose()
   tagList: string[];
+
+  @Expose()
+  @Type(() => UserProfileDto)
+  author: UserProfileDto
 
   @Transform(({obj}) => obj.author.id)
   @Expose()

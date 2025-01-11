@@ -1,15 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export class UserDto {
-  @Expose()
-  id: number;
-
-  @Expose()
-  email: string;
-
-  @Expose()
-  token: string;
-
+export class UserProfileDto {
   @Expose()
   username: string;
 
@@ -18,4 +9,7 @@ export class UserDto {
 
   @Expose()
   image: string;
+
+  @Expose()
+  following: boolean;
 }
