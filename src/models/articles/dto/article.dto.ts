@@ -6,6 +6,9 @@ export class ArticleDto {
   id: number;
 
   @Expose()
+  slug: string;
+
+  @Expose()
   title: string;
 
   @Expose()
@@ -18,10 +21,18 @@ export class ArticleDto {
   tagList: string[];
 
   @Expose()
+  createdAt: string;
+
+  @Expose()
+  updatedAt: string;
+
+  @Expose()
+  favorited: boolean;
+
+  @Expose()
+  favoritesCount: 0;
+
+  @Expose()
   @Type(() => UserProfileDto)
   author: UserProfileDto
-
-  @Transform(({obj}) => obj.author.id)
-  @Expose()
-  authorId: number;
 }

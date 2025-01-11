@@ -3,8 +3,8 @@ POST http://localhost:3000/api/v1/articles
 content-type: application/json
 
 {
-  "title": "How to train your dragon",
+  "title": "How to boil and egg",
   "description": "Ever wonder how?",
   "body": "You have to believe",
-  "tagList": ["reactjs", "angularjs", "dragons"]
+  "tagList": ["food", "egg", "protein"]
 }

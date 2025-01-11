@@ -13,14 +13,14 @@ export class Article {
   @Column()
   title: string;
 
-  @Column()
+  @Column({default: ''})
   description: string;
 
-  @Column()
+  @Column({default: ''})
   body: string;
 
   @Column('simple-array', {default: ''})
-  taglist: string[];
+  tagList: string[];
 
   @Column({default: false})
   favorited: boolean;
@@ -31,9 +31,9 @@ export class Article {
   @ManyToOne(() => User, (user) => user.articles)
   author: User;
 
-  @CreateDateColumn()
+  @CreateDateColumn({type: 'datetime'})
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({type: 'datetime'})
   updatedAt: Date;
 }
