@@ -1,5 +1,5 @@
-import { Expose, Transform, Type } from "class-transformer";
-import { UserProfileDto } from "../../users/dto/user-profile.dto";
+import { Expose, Type } from "class-transformer";
+import { UserProfileDto } from "../../user/dto/user-profile.dto";
 
 export class ArticleDto {
   @Expose()
