@@ -15,10 +15,10 @@ import { ReportDto } from './dto/report.dto';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
 import { ReportsService } from './reports.service';
-import { AuthGuard } from '../guards/auth.guard';
-import { AdminGuard } from '../guards/admin.guard';
+import { AuthGuard } from '../../common/guards/auth.guard';
+import { AdminGuard } from '../../common/guards/admin.guard';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
-import { Serialize } from '../interceptors/serialize.interceptor';
+import { Serialize } from '../../common/interceptors/serialize.interceptor';
 import { GetEstimateDto } from './dto/get-estimate';
 
 @Controller('reports')

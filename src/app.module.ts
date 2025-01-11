@@ -5,9 +5,9 @@ import {APP_PIPE} from '@nestjs/core'
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {ConfigModule, ConfigService} from '@nestjs/config'
-import { UsersModule } from './users/users.module';
-import { ArticlesModule } from './articles/articles.module';
-import { ReportsModule } from './reports/reports.module';
+import { UsersModule } from './models/users/users.module';
+import { ArticlesModule } from './models/articles/articles.module';
+import { ReportsModule } from './models/reports/reports.module';
 import { TypeOrmConfigService } from './config/typeorm.config';
 const cookieSession = require('cookie-session');
 
