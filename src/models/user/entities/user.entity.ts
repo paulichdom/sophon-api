@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { ProfileEntity } from 'src/models/profile/entities/profile.entity';
 import { Article } from '../../article/entities/article.entity';
 import { Report } from '../../report/entities/report.entity';
 import {
@@ -9,6 +10,7 @@ import {
   Column,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -16,9 +18,6 @@ import {
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  username: string;
 
   @Column({ unique: true })
   email: string;
@@ -32,11 +31,8 @@ export class User {
   @Column({ nullable: true, default: null })
   token: string | null;
 
-  @Column({ nullable: true, default: null })
-  bio: string | null;
-
-  @Column({ nullable: true, default: null })
-  image: string | null;
+  @OneToOne(() => ProfileEntity)
+  profile: ProfileEntity;
 
   @OneToMany(() => Article, (article) => article.author)
   articles: Article[];

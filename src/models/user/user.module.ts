@@ -6,9 +6,13 @@ import { UserService } from './user.service';
 import { AuthService } from 'src/auth/auth.service';
 import { UserController } from './user.controller';
 import { CurrentUserMiddleware } from './middlewares/current-user.middleware';
+import { ProfileModule } from '../profile/profile.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    ProfileModule
+  ],
   controllers: [UserController],
   providers: [
     UserService,

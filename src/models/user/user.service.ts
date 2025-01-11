@@ -2,26 +2,34 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ProfileEntity } from '../profile/entities/profile.entity';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(ProfileEntity) private profileRepository: Repository<ProfileEntity>
+  ) {}
 
-  create(username: string, email: string, password: string) {
-    const user = this.repo.create({ username, email, password });
+  async create(username: string, email: string, password: string) {
+    const user = this.userRepository.create({ email, password });
+    const savedUser = await this.userRepository.save(user);
 
-    return this.repo.save(user);
+    const profile = this.profileRepository.create({username: username, user: user})
+    await this.profileRepository.save(profile)
+
+    return savedUser;
   }
 
   findOne(id: number) {
     if (!id) {
       return null;
     }
-    return this.repo.findOneBy({ id });
+    return this.userRepository.findOneBy({ id });
   }
 
   find(email: string) {
-    return this.repo.find({ where: { email } });
+    return this.userRepository.find({ where: { email } });
   }
 
   async update(id: number, attrs: Partial<User>) {
@@ -32,7 +40,7 @@ export class UserService {
     }
 
     Object.assign(user, attrs);
-    return this.repo.save(user);
+    return this.userRepository.save(user);
   }
 
   async reomove(id: number) {
@@ -42,6 +50,6 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    return this.repo.remove(user);
+    return this.userRepository.remove(user);
   }
 }
