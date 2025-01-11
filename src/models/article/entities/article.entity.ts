@@ -12,27 +12,27 @@ export class Article {
   @Column()
   title: string;
 
-  @Column({default: ''})
+  @Column({ default: '' })
   description: string;
 
-  @Column({default: ''})
+  @Column({ default: '' })
   body: string;
 
-  @Column('simple-array', {default: ''})
+  @Column('simple-array', { default: '' })
   tagList: string[];
 
-  @Column({default: false})
+  @Column({ default: false })
   favorited: boolean;
 
-  @Column({default: 0})
+  @Column({ default: 0 })
   favoritesCount: number;
 
   @ManyToOne(() => User, (user) => user.articles)
   author: User;
 
-  @CreateDateColumn({type: 'datetime'})
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({type: 'datetime'})
+  @UpdateDateColumn()
   updatedAt: Date;
 }
