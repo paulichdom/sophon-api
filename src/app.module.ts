@@ -10,6 +10,7 @@ import { ArticleModule } from './models/article/article.module';
 import { ReportsModule } from './models/report/reports.module';
 import { TypeOrmConfigService } from './config/typeorm.config';
 import { ProfileModule } from './models/profile/profile.module';
+import { RoleModule } from './models/role/role.module';
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -25,6 +26,7 @@ const cookieSession = require('cookie-session');
     ArticleModule,
     ReportsModule,
     ProfileModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [

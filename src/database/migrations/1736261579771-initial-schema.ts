@@ -1,3 +1,5 @@
+import { Role } from "../../common/constants/role.constant";
+
 const { MigrationInterface, QueryRunner, Table } = require('typeorm');
  
 module.exports = class initialSchema1625847615203 {
@@ -57,6 +59,30 @@ module.exports = class initialSchema1625847615203 {
         ],
       }),
     );
+
+    await queryRunner.createTable(
+      new Table({
+        name: 'role',
+        columns: [
+          {
+            name: 'id',
+            type: 'integer',
+            isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'name',
+            type: 'varchar',
+            isNullable: false,
+            isUnique: true,
+          },
+        ],
+      }),
+    );
+
+    // Insert default roles
+    await queryRunner.query(`INSERT INTO role (name) VALUES ('${Role.ADMIN}'), ('${Role.EDITOR}'), ('${Role.GHOST}')`);
  
     await queryRunner.createTable(
       new Table({

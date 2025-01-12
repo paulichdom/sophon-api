@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { ProfileEntity } from 'src/models/profile/entities/profile.entity';
-import { Article } from '../../article/entities/article.entity';
-import { Report } from '../../report/entities/report.entity';
 import {
   AfterInsert,
   AfterRemove,
@@ -10,10 +5,17 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { Article } from '../../article/entities/article.entity';
+import { Report } from '../../report/entities/report.entity';
+import { ProfileEntity } from '../../profile/entities/profile.entity';
+import { RoleEntity } from '../../role/entities/role.entity';
 
 @Entity()
 export class User {
@@ -28,6 +30,10 @@ export class User {
 
   @Column({ default: false })
   admin: boolean;
+
+  @ManyToMany(() => RoleEntity, (role) => role.users, { eager: true })
+  @JoinTable()
+  roles: RoleEntity[]
 
   @Column({ nullable: true, default: null })
   token: string | null;

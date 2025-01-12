@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer";
-import { UserProfileDto } from "../../user/dto/user-profile.dto";
+import { ProfileDto } from "../../profile/dto/profile.dto";
 
 export class ArticleDto {
   @Expose()
@@ -33,6 +33,6 @@ export class ArticleDto {
   favoritesCount: 0;
 
   @Expose()
-  @Type(() => UserProfileDto)
-  author: UserProfileDto
+  @Type(() => ProfileDto)
+  author: ProfileDto
 }

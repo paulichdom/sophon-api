@@ -1,5 +1,5 @@
-import { Exclude, Expose, Transform, Type } from 'class-transformer';
-import { ProfileDto } from 'src/models/profile/dto/profile.dto';
+import { Expose, Transform } from 'class-transformer';
+import { RoleEntity } from '../../role/entities/role.entity';
 
 export class UserDto {
   @Expose()
@@ -22,4 +22,8 @@ export class UserDto {
   @Transform(({ obj }) => obj.profile.image)
   @Expose()
   image: string;
+
+  @Transform(({ obj }) => obj.roles?.map((role: RoleEntity) => role.name) || [])
+  @Expose()
+  roles: string[];
 }

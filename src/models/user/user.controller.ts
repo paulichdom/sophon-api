@@ -11,15 +11,16 @@ import {
   Session,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Serialize } from '../../common/interceptors/serialize.interceptor';
-import { UserDto } from './dto/user.dto';
 import { AuthService } from '../../auth/auth.service';
-import { User } from './entities/user.entity';
+import { UserService } from './user.service';
+import { Serialize } from '../../common/interceptors/serialize.interceptor';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthGuard } from '../../common/guards/auth.guard';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { UserDto } from './dto/user.dto';
 
 @Controller('users')
 @Serialize(UserDto)
@@ -38,7 +39,7 @@ export class UserController {
   }
 
   @Post('/login')
-  async login(@Body() body: CreateUserDto, @Session() session: any) {
+  async login(@Body() body: LoginUserDto, @Session() session: any) {
     const { email, password } = body;
     const user = await this.authService.login(email, password);
     session.userId = user.id;
