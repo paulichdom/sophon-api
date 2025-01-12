@@ -1,8 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 
-const migrationsPath = 'src/database';
-
 const envFile =
   process.env.NODE_ENV === 'production'
     ? '.env.production'

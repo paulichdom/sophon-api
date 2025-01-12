@@ -29,7 +29,7 @@ GET http://localhost:3000/api/v1/users/1
 GET http://localhost:3000/api/v1/users?sonny-rollins@sophon.com
 
 ### Delete a user with a given id
-DELETE http://localhost:3000/api/v1/users/5
+DELETE http://localhost:3000/api/v1/users/6
 
 ### Update a user
 PATCH http://localhost:3000/api/v1/users/45
