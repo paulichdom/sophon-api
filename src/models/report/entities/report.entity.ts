@@ -6,7 +6,7 @@ export class Report {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({default: false})
+  @Column({ default: false })
   approved: boolean;
 
   @Column()
@@ -16,7 +16,7 @@ export class Report {
   make: string;
 
   @Column()
-  model: string
+  model: string;
 
   @Column()
   year: number;

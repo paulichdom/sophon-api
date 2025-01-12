@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 
 import { AuthGuard } from '../../common/guards/auth.guard';
 import { Serialize } from '../../common/interceptors/serialize.interceptor';
@@ -9,7 +18,6 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { CurrentUser } from '../user/decorators/current-user.decorator';
 
-
 @Controller('articles')
 export class ArticlesController {
   constructor(private readonly articlesService: ArticleService) {}
@@ -17,7 +25,10 @@ export class ArticlesController {
   @Post()
   @UseGuards(AuthGuard)
   @Serialize(ArticleDto)
-  createArticle(@Body() createArticleDto: CreateArticleDto, @CurrentUser() user: User) {
+  createArticle(
+    @Body() createArticleDto: CreateArticleDto,
+    @CurrentUser() user: User,
+  ) {
     return this.articlesService.create(createArticleDto, user);
   }
 

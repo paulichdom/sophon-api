@@ -11,21 +11,12 @@ import { RoleModule } from '../role/role.module';
 import { ProfileService } from '../profile/profile.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    RoleModule,
-    ProfileModule
-  ],
+  imports: [TypeOrmModule.forFeature([User]), RoleModule, ProfileModule],
   controllers: [UserController],
-  providers: [
-    UserService,
-    AuthService,
-    ProfileService
-  ],
+  providers: [UserService, AuthService, ProfileService],
 })
-
 export class UserModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CurrentUserMiddleware).forRoutes('*')
+    consumer.apply(CurrentUserMiddleware).forRoutes('*');
   }
 }

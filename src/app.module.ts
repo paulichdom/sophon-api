@@ -1,10 +1,10 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {APP_PIPE} from '@nestjs/core'
+import { APP_PIPE } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {ConfigModule, ConfigService} from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './models/user/user.module';
 import { ArticleModule } from './models/article/article.module';
 import { ReportsModule } from './models/report/reports.module';
@@ -17,10 +17,10 @@ const cookieSession = require('cookie-session');
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`
+      envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService
+      useClass: TypeOrmConfigService,
     }),
     UserModule,
     ArticleModule,
@@ -32,29 +32,27 @@ const cookieSession = require('cookie-session');
   providers: [
     AppService,
     {
-       // Global validation pipe configured via DI system for better testability
+      // Global validation pipe configured via DI system for better testability
       provide: APP_PIPE,
       useValue: new ValidationPipe({
         whitelist: true,
         enableDebugMessages: true,
       }),
-    }
+    },
   ],
 })
-
 export class AppModule {
-  constructor(
-    private configService: ConfigService
-  ) {}
+  constructor(private configService: ConfigService) {}
 
   configure(consumer: MiddlewareConsumer) {
     // Session middleware configured through NestJS middleware system
     // Located in AppModule for proper DI integration and middleware lifecycle management
-    consumer.apply(
-      cookieSession({
-        keys: [this.configService.get('COOKIE_KEY')],
-      }),
-    )
-    .forRoutes('*')
+    consumer
+      .apply(
+        cookieSession({
+          keys: [this.configService.get('COOKIE_KEY')],
+        }),
+      )
+      .forRoutes('*');
   }
 }

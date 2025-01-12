@@ -14,7 +14,7 @@ const scrypt = promisify(_scrypt);
 export class AuthService {
   constructor(
     private usersService: UserService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
   ) {}
 
   async register(username: string, email: string, password: string) {
@@ -23,7 +23,7 @@ export class AuthService {
 
     if (usersByEmail.length) {
       throw new BadRequestException('Email in use');
-    } else if(usersByUsername.length) {
+    } else if (usersByUsername.length) {
       throw new BadRequestException('Username already exists');
     }
 

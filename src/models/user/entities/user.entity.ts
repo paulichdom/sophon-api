@@ -33,7 +33,7 @@ export class User {
 
   @ManyToMany(() => RoleEntity, (role) => role.users, { eager: true })
   @JoinTable()
-  roles: RoleEntity[]
+  roles: RoleEntity[];
 
   @Column({ nullable: true, default: null })
   token: string | null;

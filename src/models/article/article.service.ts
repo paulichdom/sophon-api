@@ -7,7 +7,6 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article } from './entities/article.entity';
 import { User } from '../user/entities/user.entity';
 
-
 @Injectable()
 export class ArticleService {
   constructor(@InjectRepository(Article) private repo: Repository<Article>) {}
@@ -16,7 +15,7 @@ export class ArticleService {
     const article = this.repo.create({
       ...createArticleDto,
       author: user,
-      slug: this.slugify(createArticleDto.title)
+      slug: this.slugify(createArticleDto.title),
     });
 
     return this.repo.save(article);
@@ -38,14 +37,14 @@ export class ArticleService {
     return `This action removes a #${id} article`;
   }
 
-  slugify (input: string) {
+  slugify(input: string) {
     return input
       .toLowerCase()
-      .normalize('NFD') 
+      .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .trim()
       .replace(/[\s_]+/g, '-')
       .replace(/[^\w-]+/g, '')
       .slice(0, 50);
-  };
+  }
 }

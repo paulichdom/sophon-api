@@ -8,8 +8,9 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ProfileService {
   constructor(
-    @InjectRepository(ProfileEntity) private profileRepository: Repository<ProfileEntity>
-  ) { }
+    @InjectRepository(ProfileEntity)
+    private profileRepository: Repository<ProfileEntity>,
+  ) {}
 
   create(createProfileDto: CreateProfileDto) {
     return 'This action adds a new profile';
@@ -25,8 +26,8 @@ export class ProfileService {
 
   async find(username: string) {
     return await this.profileRepository.find({
-      where: {username}
-    }) 
+      where: { username },
+    });
   }
 
   update(id: number, updateProfileDto: UpdateProfileDto) {

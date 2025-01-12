@@ -6,13 +6,9 @@ import { ProfileEntity } from './entities/profile.entity';
 import { AuthService } from 'src/auth/auth.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      ProfileEntity
-    ])
-  ],
+  imports: [TypeOrmModule.forFeature([ProfileEntity])],
   controllers: [ProfileController],
   providers: [ProfileService],
-  exports: [TypeOrmModule]
+  exports: [TypeOrmModule],
 })
 export class ProfileModule {}

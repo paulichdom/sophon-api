@@ -1,5 +1,5 @@
-import { Expose, Type } from "class-transformer";
-import { ProfileDto } from "../../profile/dto/profile.dto";
+import { Expose, Type } from 'class-transformer';
+import { ProfileDto } from '../../profile/dto/profile.dto';
 
 export class ArticleDto {
   @Expose()
@@ -34,5 +34,5 @@ export class ArticleDto {
 
   @Expose()
   @Type(() => ProfileDto)
-  author: ProfileDto
+  author: ProfileDto;
 }

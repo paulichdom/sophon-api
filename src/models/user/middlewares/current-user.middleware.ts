@@ -1,27 +1,25 @@
-import { Injectable, NestMiddleware } from "@nestjs/common";
-import { NextFunction, Request, Response } from "express";
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { NextFunction, Request, Response } from 'express';
 
-import { UserService } from "../user.service";
-import { User } from "../entities/user.entity";
+import { UserService } from '../user.service';
+import { User } from '../entities/user.entity';
 
 declare global {
   namespace Express {
     interface Request {
-      currentUser?: User
+      currentUser?: User;
     }
   }
 }
 
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {
-  constructor(
-    private usersService: UserService
-  ){}
+  constructor(private usersService: UserService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const {userId} = req.session || {}
+    const { userId } = req.session || {};
 
-    if(userId) {
+    if (userId) {
       const user = await this.usersService.findOne(userId);
       req.currentUser = user;
     }

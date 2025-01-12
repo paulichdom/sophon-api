@@ -24,7 +24,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         ? [process.cwd() + `/${migrationsPath}/migrations/*{.js,.ts}`]
         : [],
       keepConnectionAlive: isTest,
-      
     };
 
     if (!isProd) {
@@ -39,8 +38,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get('DB_USERNAME'),
       password: this.configService.get('DB_PASSWORD'),
       ssl: {
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: false,
+      },
     };
   }
 }

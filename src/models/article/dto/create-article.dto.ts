@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString } from "class-validator";
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class CreateArticleDto {
   @IsString()
@@ -12,6 +12,6 @@ export class CreateArticleDto {
 
   @IsOptional()
   @IsArray()
-  @IsString({each: true})
-  tagList: string[]
+  @IsString({ each: true })
+  tagList: string[];
 }

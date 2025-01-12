@@ -3,7 +3,10 @@ import * as dotenv from 'dotenv';
 
 const migrationsPath = 'src/database';
 
-const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+const envFile =
+  process.env.NODE_ENV === 'production'
+    ? '.env.production'
+    : '.env.development';
 dotenv.config({ path: envFile });
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -17,8 +20,8 @@ export const appDataSource = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     ssl: {
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   }),
   entities: ['**/*.entity*{.js,.ts}'],
   migrations: [__dirname + '/migrations/*{.js,.ts}'],

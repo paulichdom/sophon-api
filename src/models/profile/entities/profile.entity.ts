@@ -1,12 +1,12 @@
-import { User } from "../../user/entities/user.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from '../../user/entities/user.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('profile')
 export class ProfileEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({unique: true})
+  @Column({ unique: true })
   username: string;
 
   @Column({ nullable: true, default: null })

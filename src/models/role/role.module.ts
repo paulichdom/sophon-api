@@ -8,6 +8,6 @@ import { RoleEntity } from './entities/role.entity';
   imports: [TypeOrmModule.forFeature([RoleEntity])],
   controllers: [RoleController],
   providers: [RoleService],
-  exports: [TypeOrmModule]
+  exports: [TypeOrmModule],
 })
 export class RoleModule {}
