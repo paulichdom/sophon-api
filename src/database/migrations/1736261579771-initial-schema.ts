@@ -1,5 +1,3 @@
-import { Role } from "src/common/constants/role.constant";
-
 const { Table } = require('typeorm');
  
 module.exports = class initialSchema1625847615203 {
@@ -82,7 +80,7 @@ module.exports = class initialSchema1625847615203 {
     );
 
     // Insert default roles
-    await queryRunner.query(`INSERT INTO role (name) VALUES ('${Role.ADMIN}'), ('${Role.EDITOR}'), ('${Role.GHOST}')`);
+    await queryRunner.query(`INSERT INTO role (name) VALUES ('admin'), ('editor'), ('ghost')`);
  
     await queryRunner.createTable(
       new Table({
