@@ -8,6 +8,7 @@ import { UserController } from './user.controller';
 import { CurrentUserMiddleware } from './middlewares/current-user.middleware';
 import { ProfileModule } from '../profile/profile.module';
 import { RoleModule } from '../role/role.module';
+import { ProfileService } from '../profile/profile.service';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { RoleModule } from '../role/role.module';
   providers: [
     UserService,
     AuthService,
+    ProfileService
   ],
 })
 

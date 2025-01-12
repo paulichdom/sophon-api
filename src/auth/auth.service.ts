@@ -6,17 +6,25 @@ import {
 import { UserService } from '../models/user/user.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
+import { ProfileService } from '../models/profile/profile.service';
 
 const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UserService) {}
+  constructor(
+    private usersService: UserService,
+    private profileService: ProfileService
+  ) {}
 
   async register(username: string, email: string, password: string) {
-    const users = await this.usersService.find(email);
-    if (users.length) {
+    const usersByEmail = await this.usersService.find(email);
+    const usersByUsername = await this.profileService.find(username);
+
+    if (usersByEmail.length) {
       throw new BadRequestException('Email in use');
+    } else if(usersByUsername.length) {
+      throw new BadRequestException('Username already exists');
     }
 
     const salt = randomBytes(8).toString('hex');

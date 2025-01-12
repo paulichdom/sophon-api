@@ -3,8 +3,8 @@ POST http://localhost:3000/api/v1/users/register
 Content-Type: application/json
 
 {
-  "username": "Sonny Rollins",
-  "email": "sonny-rollins@sophon.com",
+  "username": "Will Bedeleted Again Soon",
+  "email": "will-bedeleted-again@sophon.com",
   "password": "pa55ntM4tt3r"
 }
 
@@ -26,10 +26,10 @@ POST http://localhost:3000/api/v1/users/logout
 ### Find a particular user with a given ID
 GET http://localhost:3000/api/v1/users/1
 ### Find all users with a given email
-GET http://localhost:3000/api/v1/users?email=example@testing.com
+GET http://localhost:3000/api/v1/users?sonny-rollins@sophon.com
 
 ### Delete a user with a given id
-DELETE http://localhost:3000/api/v1/users/45
+DELETE http://localhost:3000/api/v1/users/5
 
 ### Update a user
 PATCH http://localhost:3000/api/v1/users/45
