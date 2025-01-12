@@ -17,6 +17,8 @@ import { ArticleDto } from './dto/article.dto';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { CurrentUser } from '../user/decorators/current-user.decorator';
+import { ArticleListDto } from './dto/article-list.dto';
+import { SingleArticleDto } from './dto/single-article.dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -24,7 +26,7 @@ export class ArticlesController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @Serialize(ArticleDto)
+  @Serialize(SingleArticleDto)
   createArticle(
     @Body() createArticleDto: CreateArticleDto,
     @CurrentUser() user: User,
@@ -33,11 +35,13 @@ export class ArticlesController {
   }
 
   @Get()
+  @Serialize(ArticleListDto)
   findAll() {
     return this.articlesService.findAll();
   }
 
   @Get(':id')
+  @Serialize(ArticleDto)
   findOne(@Param('id') id: string) {
     return this.articlesService.findOne(+id);
   }

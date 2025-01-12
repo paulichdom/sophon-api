@@ -18,15 +18,39 @@ export class ArticleService {
       slug: this.slugify(createArticleDto.title),
     });
 
-    return this.repo.save(article);
+    const savedArticle = await this.repo.save(article);
+
+    return {
+      article: {
+        ...savedArticle,
+        author: savedArticle.author.profile,
+      },
+    };
   }
 
-  findAll() {
-    return `This action returns all articles`;
+  async findAll() {
+    const allArticles = await this.repo.find({
+      relations: ['author', 'author.profile'],
+    });
+
+    const mappedArticles = allArticles.map((article) => {
+      return {
+        ...article,
+        author: article.author.profile,
+      };
+    });
+
+    return {
+      articles: [...mappedArticles],
+      articlesCount: mappedArticles.length,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} article`;
+  async findOne(id: number) {
+    return this.repo.findOne({
+      where: { id },
+      relations: ['author', 'author.profile'],
+    });
   }
 
   update(id: number, updateArticleDto: UpdateArticleDto) {

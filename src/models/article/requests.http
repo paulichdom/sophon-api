@@ -8,3 +8,11 @@ content-type: application/json
   "body": "You have to believe",
   "tagList": ["food", "egg", "protein"]
 }
+
+### List all articles
+GET http://localhost:3000/api/v1/articles
+content-type: application/json
+
+### Get article by id
+GET http://localhost:3000/api/v1/articles/1
+content-type: application/json

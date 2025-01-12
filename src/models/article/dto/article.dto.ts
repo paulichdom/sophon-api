@@ -30,9 +30,9 @@ export class ArticleDto {
   favorited: boolean;
 
   @Expose()
-  favoritesCount: 0;
-  
-  @Transform(({obj}) => obj.author.profile)
+  favoritesCount: number;
+
+  @Transform(({ obj }) => obj.author.profile)
   @Expose()
   author: ProfileDto;
 }
