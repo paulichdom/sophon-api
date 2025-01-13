@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 
 import { AuthGuard } from '../../common/guards/auth.guard';
@@ -36,8 +37,8 @@ export class ArticlesController {
 
   @Get()
   @Serialize(ArticleListDto)
-  findAll() {
-    return this.articlesService.findAll();
+  findAll(@Query('author') authorUsername: string) {
+    return this.articlesService.findAll(authorUsername);
   }
 
   @Get(':id')

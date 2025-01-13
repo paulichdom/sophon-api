@@ -28,12 +28,17 @@ export class ArticleService {
     };
   }
 
-  async findAll() {
-    const allArticles = await this.repo.find({
+  async findAll(username?: string) {
+    const authorFilter = username
+      ? { author: { profile: { username } } }
+      : undefined;
+
+    const [articles, count] = await this.repo.findAndCount({
       relations: ['author', 'author.profile'],
+      where: authorFilter,
     });
 
-    const mappedArticles = allArticles.map((article) => {
+    const mappedArticles = articles.map((article) => {
       return {
         ...article,
         author: article.author.profile,
@@ -42,7 +47,7 @@ export class ArticleService {
 
     return {
       articles: [...mappedArticles],
-      articlesCount: mappedArticles.length,
+      articlesCount: count,
     };
   }
 
