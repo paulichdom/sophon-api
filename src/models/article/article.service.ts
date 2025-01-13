@@ -21,11 +21,9 @@ export class ArticleService {
     const savedArticle = await this.repo.save(article);
 
     return {
-      article: {
-        ...savedArticle,
-        author: savedArticle.author.profile,
-      },
-    };
+      ...savedArticle,
+      author: savedArticle.author.profile,
+    }
   }
 
   async findAll(username?: string) {

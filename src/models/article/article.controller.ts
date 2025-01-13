@@ -14,7 +14,6 @@ import { AuthGuard } from '../../common/guards/auth.guard';
 import { Serialize } from '../../common/interceptors/serialize.interceptor';
 import { ArticleService } from './article.service';
 import { User } from '../user/entities/user.entity';
-import { ArticleDto } from './dto/article.dto';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { CurrentUser } from '../user/decorators/current-user.decorator';
