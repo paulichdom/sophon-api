@@ -9,7 +9,7 @@ import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class ArticleService {
-  constructor(@InjectRepository(Article) private repo: Repository<Article>) {}
+  constructor(@InjectRepository(Article) private repo: Repository<Article>) { }
 
   async create(createArticleDto: CreateArticleDto, user: User) {
     const article = this.repo.create({
@@ -51,11 +51,16 @@ export class ArticleService {
     };
   }
 
-  async findOne(id: number) {
-    return this.repo.findOne({
-      where: { id },
+  async findOne(slug: string) {
+    const article = await this.repo.findOne({
+      where: { slug },
       relations: ['author', 'author.profile'],
     });
+
+    return {
+      ...article,
+      author: article.author.profile,
+    };
   }
 
   update(id: number, updateArticleDto: UpdateArticleDto) {

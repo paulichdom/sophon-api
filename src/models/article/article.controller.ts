@@ -41,10 +41,10 @@ export class ArticlesController {
     return this.articlesService.findAll(authorUsername);
   }
 
-  @Get(':id')
-  @Serialize(ArticleDto)
-  findOne(@Param('id') id: string) {
-    return this.articlesService.findOne(+id);
+  @Get('/:slug')
+  @Serialize(SingleArticleDto)
+  findOne(@Param('slug') slug: string) {
+    return this.articlesService.findOne(slug);
   }
 
   @Patch(':id')
