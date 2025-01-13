@@ -1,7 +1,7 @@
 {
   "name": "sophon-api",
   "version": "0.0.1",
-  "description": "",
+  "description": "RealWorld custom API for social blogging site (i.e. a Medium.com clone)",
   "author": "dompaulich",
   "private": true,
   "license": "UNLICENSED",
