@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ArrayContains, In, Repository } from 'typeorm';
 
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -26,14 +26,20 @@ export class ArticleService {
     }
   }
 
-  async findAll(username?: string) {
-    const authorFilter = username
-      ? { author: { profile: { username } } }
+  async findAll(query?: Record<string, string>) {
+    const authorFilter = 'author' in query
+      ? { author: { profile: { username: query.author } } }
       : undefined;
+
+    const tagFilter = 'tag' in query
+      ? { tagList: ArrayContains([query.tag]) }
+      : undefined;
+
+    const whereConditions = [authorFilter, tagFilter].filter(Boolean);
 
     const [articles, count] = await this.repo.findAndCount({
       relations: ['author', 'author.profile'],
-      where: authorFilter,
+      where: whereConditions,
     });
 
     const mappedArticles = articles.map((article) => {

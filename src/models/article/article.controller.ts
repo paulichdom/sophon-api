@@ -22,7 +22,7 @@ import { SingleArticleDto } from './dto/single-article.dto';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticleService) {}
+  constructor(private readonly articlesService: ArticleService) { }
 
   @Post()
   @UseGuards(AuthGuard)
@@ -36,8 +36,9 @@ export class ArticlesController {
 
   @Get()
   @Serialize(ArticleListDto)
-  findAll(@Query('author') authorUsername: string) {
-    return this.articlesService.findAll(authorUsername);
+  findAll(@Query() query, ) {
+    console.log(query)
+    return this.articlesService.findAll(query);
   }
 
   @Get('/:slug')
