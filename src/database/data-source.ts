@@ -12,15 +12,13 @@ const isProd = process.env.NODE_ENV === 'production';
 export const appDataSource = new DataSource({
   type: process.env.DB_TYPE as any,
   database: process.env.DB_NAME,
-  ...(isProd && {
-    host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT),
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  }),
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  ssl: isProd ? {
+    rejectUnauthorized: false,
+  } : false,
   entities: ['**/*.entity*{.js,.ts}'],
   migrations: [__dirname + '/migrations/*{.js,.ts}'],
 } as DataSourceOptions);
