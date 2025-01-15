@@ -36,8 +36,7 @@ export class ArticlesController {
 
   @Get()
   @Serialize(ArticleListDto)
-  findAll(@Query() query, ) {
-    console.log(query)
+  findAll(@Query() query) {
     return this.articlesService.findAll(query);
   }
 
