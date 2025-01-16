@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArrayContains, In, Repository } from 'typeorm';
 
@@ -9,7 +9,7 @@ import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class ArticleService {
-  constructor(@InjectRepository(Article) private repo: Repository<Article>) { }
+  constructor(@InjectRepository(Article) private repo: Repository<Article>) {}
 
   async create(createArticleDto: CreateArticleDto, user: User) {
     const article = this.repo.create({
@@ -23,17 +23,17 @@ export class ArticleService {
     return {
       ...savedArticle,
       author: savedArticle.author.profile,
-    }
+    };
   }
 
   async findAll(query?: Record<string, string>) {
-    const authorFilter = 'author' in query
-      ? { author: { profile: { username: query.author } } }
-      : undefined;
+    const authorFilter =
+      'author' in query
+        ? { author: { profile: { username: query.author } } }
+        : undefined;
 
-    const tagFilter = 'tag' in query
-      ? { tagList: ArrayContains([query.tag]) }
-      : undefined;
+    const tagFilter =
+      'tag' in query ? { tagList: ArrayContains([query.tag]) } : undefined;
 
     const whereConditions = [authorFilter, tagFilter].filter(Boolean);
 
@@ -67,8 +67,23 @@ export class ArticleService {
     };
   }
 
-  update(id: number, updateArticleDto: UpdateArticleDto) {
-    return `This action updates a #${id} article`;
+  async update(slug: string, updateArticleDto: UpdateArticleDto) {
+    const article = await this.repo.findOneBy({ slug });
+
+    if (!article) {
+      throw new NotFoundException(`Article ${slug} not found`);
+    }
+
+    const updateArticlePayload = {
+      ...updateArticleDto,
+      slug: updateArticleDto.title
+        ? this.slugify(updateArticleDto.title)
+        : article.slug,
+    };
+
+    const updatedArticle = this.repo.merge(article, updateArticlePayload);
+
+    return this.repo.save(updatedArticle);
   }
 
   remove(id: number) {

@@ -16,9 +16,11 @@ export const appDataSource = new DataSource({
   port: parseInt(process.env.DB_PORT),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  ssl: isProd ? {
-    rejectUnauthorized: false,
-  } : false,
+  ssl: isProd
+    ? {
+        rejectUnauthorized: false,
+      }
+    : false,
   entities: ['**/*.entity*{.js,.ts}'],
   migrations: [__dirname + '/migrations/*{.js,.ts}'],
 } as DataSourceOptions);

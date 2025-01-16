@@ -9,13 +9,15 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Sophon Api')
-    .setDescription('RealWorld custom API for social blogging site (i.e. a Medium.com clone)')
+    .setDescription(
+      'RealWorld custom API for social blogging site (i.e. a Medium.com clone)',
+    )
     .setVersion('1.0')
     .addTag('sophon-api')
-    .build()
+    .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory)
+  SwaggerModule.setup('api', app, documentFactory);
 
   await app.listen(process.env.PORT ?? 3000);
 }

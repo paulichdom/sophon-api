@@ -4,7 +4,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-  constructor(private configService: ConfigService) { }
+  constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     const env = this.configService.get('NODE_ENV');
@@ -24,14 +24,12 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       ssl: !isProd
         ? false
         : {
-          rejectUnauthorized: false,
-        },
+            rejectUnauthorized: false,
+          },
       autoLoadEntities: true,
       synchronize: !isProd,
       migrationsRun: migrationsRun,
-      migrations: migrationsRun
-        ? [process.cwd() + `/${migrationsPath}`]
-        : [],
+      migrations: migrationsRun ? [process.cwd() + `/${migrationsPath}`] : [],
       keepConnectionAlive: isTest,
     };
 

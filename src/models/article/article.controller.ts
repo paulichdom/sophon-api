@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
   Query,
+  Put,
 } from '@nestjs/common';
 
 import { AuthGuard } from '../../common/guards/auth.guard';
@@ -22,7 +22,7 @@ import { SingleArticleDto } from './dto/single-article.dto';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticleService) { }
+  constructor(private readonly articlesService: ArticleService) {}
 
   @Post()
   @UseGuards(AuthGuard)
@@ -46,9 +46,12 @@ export class ArticlesController {
     return this.articlesService.findOne(slug);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
-    return this.articlesService.update(+id, updateArticleDto);
+  @Put('/:slug')
+  update(
+    @Param('slug') slug: string,
+    @Body() updateArticleDto: UpdateArticleDto,
+  ) {
+    return this.articlesService.update(slug, updateArticleDto);
   }
 
   @Delete(':id')
