@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -28,14 +29,14 @@ export class Article {
   @Column('simple-array', { default: '' })
   tagList: string[];
 
-  @Column({ default: false })
-  favorited: boolean;
-
-  @Column({ default: 0 })
-  favoritesCount: number;
-
   @ManyToOne(() => User, (user) => user.articles)
   author: User;
+
+  @ManyToMany(() => User,(user) => user.favoritedArticles)
+  favoritedBy: User[]
+
+  @Column({default: 0})
+  favoriteCount: number;
 
   @CreateDateColumn()
   createdAt: Date;

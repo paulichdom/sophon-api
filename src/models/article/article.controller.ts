@@ -54,6 +54,13 @@ export class ArticlesController {
     return this.articlesService.update(slug, updateArticleDto);
   }
 
+  @Post('/:slug/favorite')
+  favorite(
+    @Param('slug') slug: string
+  ) {
+    return 'Favorite';
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.articlesService.remove(+id);

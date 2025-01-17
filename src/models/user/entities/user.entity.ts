@@ -32,7 +32,7 @@ export class User {
   admin: boolean;
 
   @ManyToMany(() => RoleEntity, (role) => role.users, { eager: true })
-  @JoinTable()
+  @JoinTable({name: 'user_roles'})
   roles: RoleEntity[];
 
   @Column({ nullable: true, default: null })
@@ -44,6 +44,10 @@ export class User {
 
   @OneToMany(() => Article, (article) => article.author)
   articles: Article[];
+
+  @ManyToMany(() => Article, (article) => article.favoritedBy)
+  @JoinTable({name: 'user_favorited_articles'})
+  favoritedArticles: Article[]
 
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[];
