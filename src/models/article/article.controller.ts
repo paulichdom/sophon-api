@@ -55,10 +55,12 @@ export class ArticlesController {
   }
 
   @Post('/:slug/favorite')
+  @UseGuards(AuthGuard)
   favorite(
-    @Param('slug') slug: string
+    @Param('slug') slug: string,
+    @CurrentUser() user: User,
   ) {
-    return 'Favorite';
+    return this.articlesService.favorite(slug, user);
   }
 
   @Delete(':id')

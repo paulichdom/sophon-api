@@ -32,10 +32,10 @@ export class Article {
   @ManyToOne(() => User, (user) => user.articles)
   author: User;
 
-  @ManyToMany(() => User,(user) => user.favoritedArticles)
-  favoritedBy: User[]
+  @ManyToMany(() => User, (user) => user.favoritedArticles)
+  favoritedBy: User[];
 
-  @Column({default: 0})
+  @Column({ default: 0 })
   favoriteCount: number;
 
   @CreateDateColumn()
