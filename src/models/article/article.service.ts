@@ -95,13 +95,16 @@ export class ArticleService {
   async favorite(slug: string, user: User) {
     let article = await this.articleRepository.findOne({
       where: { slug },
+      relations: ['favoritedBy'],
     });
 
-    console.log({ user });
+    const userWithFavorited = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: ['favoritedArticles'],
+    });
 
     const isNewFavorite =
-      user.favoritedArticles &&
-      user.favoritedArticles.findIndex(
+      userWithFavorited.favoritedArticles.findIndex(
         (_article) => _article.id === article.id,
       ) < 0;
 
@@ -110,7 +113,7 @@ export class ArticleService {
         article.favoritedBy = [];
       }
 
-      article.favoritedBy.push(user);
+      article.favoritedBy.push(userWithFavorited);
       article.favoriteCount++;
 
       article = await this.articleRepository.save(article);
