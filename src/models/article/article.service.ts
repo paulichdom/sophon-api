@@ -95,7 +95,7 @@ export class ArticleService {
   async favorite(slug: string, user: User) {
     let article = await this.articleRepository.findOne({
       where: { slug },
-      relations: ['favoritedBy'],
+      relations: ['favoritedBy', 'author'],
     });
 
     const userWithFavorited = await this.userRepository.findOne({
@@ -114,12 +114,15 @@ export class ArticleService {
       }
 
       article.favoritedBy.push(userWithFavorited);
-      article.favoriteCount++;
+      article.favoritesCount++;
 
       article = await this.articleRepository.save(article);
     }
 
-    return { article };
+    return {
+      ...article,
+      favorited: true
+    };
   }
 
   remove(id: number) {

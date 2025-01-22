@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Article {
@@ -33,10 +34,11 @@ export class Article {
   author: User;
 
   @ManyToMany(() => User, (user) => user.favoritedArticles)
+  @Exclude({ toPlainOnly: true })
   favoritedBy: User[];
 
   @Column({ default: 0 })
-  favoriteCount: number;
+  favoritesCount: number;
 
   @CreateDateColumn()
   createdAt: Date;

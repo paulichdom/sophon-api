@@ -1,4 +1,4 @@
-import { Expose, Transform, Type } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import { ProfileDto } from '../../profile/dto/profile.dto';
 
 export class ArticleDto {
@@ -31,6 +31,9 @@ export class ArticleDto {
 
   @Expose()
   favoritesCount: number;
+
+  @Exclude()
+  favoritedBy: ProfileDto[];
 
   @Transform(({ obj }) => obj.author.profile)
   @Expose()

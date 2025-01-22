@@ -16,6 +16,7 @@ import { Article } from '../../article/entities/article.entity';
 import { Report } from '../../report/entities/report.entity';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
 import { RoleEntity } from '../../role/entities/role.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -26,6 +27,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ default: false })

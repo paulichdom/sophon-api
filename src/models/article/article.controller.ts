@@ -56,6 +56,7 @@ export class ArticlesController {
 
   @Post('/:slug/favorite')
   @UseGuards(AuthGuard)
+  @Serialize(SingleArticleDto)
   favorite(
     @Param('slug') slug: string,
     @CurrentUser() user: User,
