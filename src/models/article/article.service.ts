@@ -25,8 +25,9 @@ export class ArticleService {
 
     return {
       ...savedArticle,
-      author: savedArticle.author.profile,
+      favorited: false,
     };
+
   }
 
   async findAll(query?: Record<string, string>) {
@@ -45,15 +46,8 @@ export class ArticleService {
       where: whereConditions,
     });
 
-    const mappedArticles = articles.map((article) => {
-      return {
-        ...article,
-        author: article.author.profile,
-      };
-    });
-
     return {
-      articles: [...mappedArticles],
+      articles,
       articlesCount: count,
     };
   }
@@ -66,7 +60,8 @@ export class ArticleService {
 
     return {
       ...article,
-      author: article.author.profile,
+      // TODO: Remove this harcoded value. Check user favorited articles
+      favorited: false
     };
   }
 
@@ -119,11 +114,8 @@ export class ArticleService {
       article = await this.articleRepository.save(article);
     }
 
-    const {favoritedBy, ...favoritedArticle} = article;
-
     return {
-      ...favoritedArticle,
-      author: article.author.profile,
+      ...article,
       favorited: true
     };
   }

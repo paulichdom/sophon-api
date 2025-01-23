@@ -27,7 +27,7 @@ export class Article {
   @Column({ default: '' })
   body: string;
 
-  @Column('simple-array', { default: '' })
+  @Column('text', { array: true, default: [] })
   tagList: string[];
 
   @ManyToOne(() => User, (user) => user.articles)

@@ -1,39 +1,17 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { ProfileDto } from '../../profile/dto/profile.dto';
 
 export class ArticleDto {
-  @Expose()
-  id: number;
-
-  @Expose()
-  slug: string;
-
-  @Expose()
-  title: string;
-
-  @Expose()
-  description: string;
-
-  @Expose()
-  body: string;
-
-  @Expose()
-  tagList: string[];
-
-  @Expose()
-  createdAt: string;
-
-  @Expose()
-  updatedAt: string;
-
-  @Expose()
-  favorited: boolean;
-
-  @Expose()
-  favoritesCount: number;
-
-  @Exclude()
-  favoritedBy: ProfileDto[];
+  @Expose() id: number;
+  @Expose() slug: string;
+  @Expose() title: string;
+  @Expose() description: string;
+  @Expose() body: string;
+  @Expose() tagList: string[];
+  @Expose() createdAt: string;
+  @Expose() updatedAt: string;
+  @Expose() favorited: boolean;
+  @Expose() favoritesCount: number;
 
   @Transform(({ obj }) => obj.author.profile)
   @Expose()

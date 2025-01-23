@@ -1,8 +1,8 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { ArticleDto } from './article.dto';
 
 export class SingleArticleDto {
   @Expose()
-  @Transform(({ obj }) => obj)
+  @Type(() => ArticleDto)
   article: ArticleDto;
 }

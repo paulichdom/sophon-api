@@ -27,41 +27,52 @@ export class ArticlesController {
   @Post()
   @UseGuards(AuthGuard)
   @Serialize(SingleArticleDto)
-  createArticle(
+  async createArticle(
     @Body() createArticleDto: CreateArticleDto,
     @CurrentUser() user: User,
   ) {
-    return this.articlesService.create(createArticleDto, user);
+    const newArticle = await this.articlesService.create(
+      createArticleDto,
+      user,
+    );
+    return { article: newArticle };
   }
 
   @Get()
   @Serialize(ArticleListDto)
-  findAll(@Query() query) {
-    return this.articlesService.findAll(query);
+  async findAll(@Query() query) {
+    const { articles, articlesCount } =
+      await this.articlesService.findAll(query);
+    return {
+      articles: articles,
+      articlesCount: articlesCount,
+    };
   }
 
   @Get('/:slug')
   @Serialize(SingleArticleDto)
-  findOne(@Param('slug') slug: string) {
-    return this.articlesService.findOne(slug);
+  async findOne(@Param('slug') slug: string) {
+    const article = await this.articlesService.findOne(slug);
+    return { article: article };
   }
 
+  // TODO: Handle update issues
   @Put('/:slug')
-  update(
+  @Serialize(SingleArticleDto)
+  async update(
     @Param('slug') slug: string,
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
-    return this.articlesService.update(slug, updateArticleDto);
+    const updatedArticle = this.articlesService.update(slug, updateArticleDto);
+    return { article: updatedArticle };
   }
 
   @Post('/:slug/favorite')
-  @UseGuards(AuthGuard)
   @Serialize(SingleArticleDto)
-  favorite(
-    @Param('slug') slug: string,
-    @CurrentUser() user: User,
-  ) {
-    return this.articlesService.favorite(slug, user);
+  @UseGuards(AuthGuard)
+  async favorite(@Param('slug') slug: string, @CurrentUser() user: User) {
+    const favoritedArticle = await this.articlesService.favorite(slug, user);
+    return { article: favoritedArticle };
   }
 
   @Delete(':id')
