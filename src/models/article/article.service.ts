@@ -27,29 +27,45 @@ export class ArticleService {
       ...savedArticle,
       favorited: false,
     };
-
   }
 
-  async findAll(query?: Record<string, string>) {
-    const authorFilter =
-      'author' in query
-        ? { author: { profile: { username: query.author } } }
-        : undefined;
+  async findAll(user: User, query?: Record<string, string>, ) {
+    const queryBuilder = this.articleRepository.createQueryBuilder('article');
 
-    const tagFilter =
-      'tag' in query ? { tagList: ArrayContains([query.tag]) } : undefined;
+    queryBuilder
+      .leftJoinAndSelect('article.author', 'author')
+      .leftJoinAndSelect('author.profile', 'profile');
+    
+    if('author' in query) {
+      queryBuilder.andWhere('profile.username = :username', {username: query.author})
+    }
 
-    const whereConditions = [authorFilter, tagFilter].filter(Boolean);
+    if('tag' in query) {
+      queryBuilder.andWhere(':tag = ANY(article.tagList)', {tag: query.tag})
+    }
 
-    const [articles, count] = await this.articleRepository.findAndCount({
-      relations: ['author', 'author.profile'],
-      where: whereConditions,
-    });
+    queryBuilder.leftJoinAndSelect(
+      'article.favoritedBy',
+      'favoriteCheck',
+      'favoriteCheck.id = :userId',
+      {userId: user.id}
+    )
+
+    const [articles, count] = await queryBuilder.getManyAndCount();
+
+    const results = articles.map((article) => {
+      const isFavorited = Array.isArray(article.favoritedBy) && article.favoritedBy.length > 0;
+
+      return {
+        ...article,
+        favorited: isFavorited
+      }
+    })
 
     return {
-      articles,
-      articlesCount: count,
-    };
+      articles: results,
+      articlesCount: count
+    }
   }
 
   async findOne(slug: string, user: User) {
@@ -63,15 +79,15 @@ export class ArticleService {
     }
 
     const isFavorited = await this.articleRepository
-    .createQueryBuilder('article')
-    .leftJoin('article.favoritedBy', 'user')
-    .where('article.id = :articleId', { articleId: article.id })
-    .andWhere('user.id = :userId', { userId: user.id })
-    .getCount();
+      .createQueryBuilder('article')
+      .leftJoin('article.favoritedBy', 'user')
+      .where('article.id = :articleId', { articleId: article.id })
+      .andWhere('user.id = :userId', { userId: user.id })
+      .getCount();
 
     return {
       ...article,
-      favorited: isFavorited > 0
+      favorited: isFavorited > 0,
     };
   }
 
@@ -126,7 +142,7 @@ export class ArticleService {
 
     return {
       ...article,
-      favorited: true
+      favorited: true,
     };
   }
 
