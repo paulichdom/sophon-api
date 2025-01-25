@@ -56,14 +56,14 @@ export class ArticlesController {
     return { article: article };
   }
 
-  // TODO: Handle update issues
   @Put('/:slug')
   @Serialize(SingleArticleDto)
   async update(
     @Param('slug') slug: string,
+    @CurrentUser() user: User,
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
-    const updatedArticle = this.articlesService.update(slug, updateArticleDto);
+    const updatedArticle = await this.articlesService.update(slug, user, updateArticleDto);
     return { article: updatedArticle };
   }
 

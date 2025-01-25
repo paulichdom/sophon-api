@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ArrayContains, In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -29,43 +29,46 @@ export class ArticleService {
     };
   }
 
-  async findAll(user: User, query?: Record<string, string>, ) {
+  async findAll(user: User, query?: Record<string, string>) {
     const queryBuilder = this.articleRepository.createQueryBuilder('article');
 
     queryBuilder
       .leftJoinAndSelect('article.author', 'author')
       .leftJoinAndSelect('author.profile', 'profile');
-    
-    if('author' in query) {
-      queryBuilder.andWhere('profile.username = :username', {username: query.author})
+
+    if ('author' in query) {
+      queryBuilder.andWhere('profile.username = :username', {
+        username: query.author,
+      });
     }
 
-    if('tag' in query) {
-      queryBuilder.andWhere(':tag = ANY(article.tagList)', {tag: query.tag})
+    if ('tag' in query) {
+      queryBuilder.andWhere(':tag = ANY(article.tagList)', { tag: query.tag });
     }
 
     queryBuilder.leftJoinAndSelect(
       'article.favoritedBy',
       'favoriteCheck',
       'favoriteCheck.id = :userId',
-      {userId: user.id}
-    )
+      { userId: user.id },
+    );
 
     const [articles, count] = await queryBuilder.getManyAndCount();
 
     const results = articles.map((article) => {
-      const isFavorited = Array.isArray(article.favoritedBy) && article.favoritedBy.length > 0;
+      const isFavorited =
+        Array.isArray(article.favoritedBy) && article.favoritedBy.length > 0;
 
       return {
         ...article,
-        favorited: isFavorited
-      }
-    })
+        favorited: isFavorited,
+      };
+    });
 
     return {
       articles: results,
-      articlesCount: count
-    }
+      articlesCount: count,
+    };
   }
 
   async findOne(slug: string, user: User) {
@@ -78,23 +81,21 @@ export class ArticleService {
       throw new NotFoundException(`Article ${slug} not found`);
     }
 
-    const isFavorited = await this.articleRepository
-      .createQueryBuilder('article')
-      .leftJoin('article.favoritedBy', 'user')
-      .where('article.id = :articleId', { articleId: article.id })
-      .andWhere('user.id = :userId', { userId: user.id })
-      .getCount();
+    const isFavorited = await this.isFavorited(article.id, user.id);
 
     return {
       ...article,
-      favorited: isFavorited > 0,
+      favorited: isFavorited,
     };
   }
 
-  async update(slug: string, updateArticleDto: UpdateArticleDto) {
-    const article = await this.articleRepository.findOneBy({ slug });
+  async update(slug: string, user: User, updateArticleDto: UpdateArticleDto) {
+    const articleToUpdate = await this.articleRepository.findOne({
+      where: { slug },
+      relations: ['author', 'author.profile'],
+    });
 
-    if (!article) {
+    if (!articleToUpdate) {
       throw new NotFoundException(`Article ${slug} not found`);
     }
 
@@ -102,15 +103,21 @@ export class ArticleService {
       ...updateArticleDto,
       slug: updateArticleDto.title
         ? this.slugify(updateArticleDto.title)
-        : article.slug,
+        : articleToUpdate.slug,
     };
 
     const updatedArticle = this.articleRepository.merge(
-      article,
+      articleToUpdate,
       updateArticlePayload,
     );
 
-    return this.articleRepository.save(updatedArticle);
+    const article = await this.articleRepository.save(updatedArticle);
+    const isFavorited = await this.isFavorited(article.id, user.id);
+
+    return {
+      ...article,
+      favorited: isFavorited,
+    };
   }
 
   async favorite(slug: string, user: User) {
@@ -148,6 +155,17 @@ export class ArticleService {
 
   remove(id: number) {
     return `This action removes a #${id} article`;
+  }
+
+  async isFavorited(articleId: number, userId: number) {
+    const isFavorited = await this.articleRepository
+      .createQueryBuilder('article')
+      .leftJoin('article.favoritedBy', 'user')
+      .where('article.id = :articleId', { articleId })
+      .andWhere('user.id = :userId', { userId })
+      .getCount();
+
+    return isFavorited > 0;
   }
 
   slugify(input: string) {
