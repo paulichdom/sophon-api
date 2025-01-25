@@ -46,6 +46,15 @@ export class ArticleService {
       queryBuilder.andWhere(':tag = ANY(article.tagList)', { tag: query.tag });
     }
 
+    if('favorited' in query) {
+      queryBuilder
+      .innerJoin('article.favoritedBy', 'favoritedUser')       // Inner join ensures articles are returned only if they have a matching user
+      .innerJoin('favoritedUser.profile', 'favoritedUserProfile')
+      .andWhere('favoritedUserProfile.username = :favoritedUser', {
+        favoritedUser: query.favorited,
+      });
+    }
+
     queryBuilder.leftJoinAndSelect(
       'article.favoritedBy',
       'favoriteCheck',
