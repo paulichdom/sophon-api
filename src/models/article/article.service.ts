@@ -52,16 +52,26 @@ export class ArticleService {
     };
   }
 
-  async findOne(slug: string) {
+  async findOne(slug: string, user: User) {
     const article = await this.articleRepository.findOne({
       where: { slug },
       relations: ['author', 'author.profile'],
     });
 
+    if (!article) {
+      throw new NotFoundException(`Article ${slug} not found`);
+    }
+
+    const isFavorited = await this.articleRepository
+    .createQueryBuilder('article')
+    .leftJoin('article.favoritedBy', 'user')
+    .where('article.id = :articleId', { articleId: article.id })
+    .andWhere('user.id = :userId', { userId: user.id })
+    .getCount();
+
     return {
       ...article,
-      // TODO: Remove this harcoded value. Check user favorited articles
-      favorited: false
+      favorited: isFavorited > 0
     };
   }
 

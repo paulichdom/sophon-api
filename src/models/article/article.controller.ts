@@ -51,8 +51,8 @@ export class ArticlesController {
 
   @Get('/:slug')
   @Serialize(SingleArticleDto)
-  async findOne(@Param('slug') slug: string) {
-    const article = await this.articlesService.findOne(slug);
+  async findOne(@Param('slug') slug: string, @CurrentUser() user: User) {
+    const article = await this.articlesService.findOne(slug, user);
     return { article: article };
   }
 
