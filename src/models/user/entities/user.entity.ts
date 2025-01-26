@@ -1,7 +1,4 @@
 import {
-  AfterInsert,
-  AfterRemove,
-  AfterUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -55,17 +52,4 @@ export class User {
 
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[];
-
-  @AfterInsert()
-  logInsert() {
-    console.info('Inserted User with id', this.id);
-  }
-  @AfterUpdate()
-  logUpdate() {
-    console.info('Updated User with id', this.id);
-  }
-  @AfterRemove()
-  logRemove() {
-    console.info('Removed User with id', this.id);
-  }
 }
