@@ -46,13 +46,13 @@ export class ArticleService {
       queryBuilder.andWhere(':tag = ANY(article.tagList)', { tag: query.tag });
     }
 
-    if('favorited' in query) {
+    if ('favorited' in query) {
       queryBuilder
-      .innerJoin('article.favoritedBy', 'favoritedUser')       // Inner join ensures articles are returned only if they have a matching user
-      .innerJoin('favoritedUser.profile', 'favoritedUserProfile')
-      .andWhere('favoritedUserProfile.username = :favoritedUser', {
-        favoritedUser: query.favorited,
-      });
+        .innerJoin('article.favoritedBy', 'favoritedUser')
+        .innerJoin('favoritedUser.profile', 'favoritedUserProfile')
+        .andWhere('favoritedUserProfile.username = :favoritedUser', {
+          favoritedUser: query.favorited,
+        });
     }
 
     queryBuilder.leftJoinAndSelect(
@@ -159,6 +159,50 @@ export class ArticleService {
     return {
       ...article,
       favorited: true,
+    };
+  }
+
+  async unfavorite(slug: string, user: User) {
+    const foundUser = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: ['favoritedArticles'],
+    });
+
+    if (!foundUser) {
+      throw new NotFoundException(`User with ID '${user.id}' not found`);
+    }
+
+    const articleToUnfavorite = await this.articleRepository.findOne({
+      where: { slug },
+      relations: ['author', 'author.profile'],
+    });
+
+    if (!articleToUnfavorite) {
+      throw new NotFoundException(`Article with slug '${slug}' not found`);
+    }
+
+    const isFavorited = foundUser.favoritedArticles.some(
+      (favArticle) => favArticle.id === articleToUnfavorite.id,
+    );
+
+    if (!isFavorited) {
+      return {
+        ...articleToUnfavorite,
+        favorited: isFavorited,
+      };
+    }
+
+    foundUser.favoritedArticles = foundUser.favoritedArticles.filter(
+      (favArticle) => favArticle.id !== articleToUnfavorite.id,
+    );
+    await this.userRepository.save(foundUser);
+
+    articleToUnfavorite.favoritesCount--;
+    const unfavoritedArticle = await this.articleRepository.save(articleToUnfavorite);
+
+    return {
+      ...unfavoritedArticle,
+      favorited: false,
     };
   }
 

@@ -75,6 +75,15 @@ export class ArticlesController {
     return { article: favoritedArticle };
   }
 
+  @Delete('/:slug/favorite')
+  @Serialize(SingleArticleDto)
+  @UseGuards(AuthGuard)
+  async unfavorite(@Param('slug') slug: string, @CurrentUser() user: User) {
+    const unfavoritedArticle = await this.articlesService.unfavorite(slug, user);
+    return { article: unfavoritedArticle };
+  }
+
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.articlesService.remove(+id);
