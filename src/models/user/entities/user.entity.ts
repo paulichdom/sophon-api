@@ -6,20 +6,18 @@ import {
   ManyToMany,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { Article } from '../../article/entities/article.entity';
 import { Report } from '../../report/entities/report.entity';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
 import { RoleEntity } from '../../role/entities/role.entity';
-import { Exclude } from 'class-transformer';
+import { CommentEntity } from '../../comment/entities/comment.entity';
+import { BaseEntity } from 'src/models/shared/base.entity';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
@@ -49,6 +47,9 @@ export class User {
   })
   @JoinTable({ name: 'user_favorited_articles' })
   favoritedArticles: Article[];
+
+  @OneToMany(() => CommentEntity, (comment) => comment.author)
+  comments: CommentEntity[];
 
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[];

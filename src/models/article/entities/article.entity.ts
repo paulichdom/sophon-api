@@ -1,20 +1,18 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   ManyToMany,
   ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
 import { Exclude } from 'class-transformer';
 
-@Entity()
-export class Article {
-  @PrimaryGeneratedColumn()
-  id: number;
+import { BaseEntity } from 'src/models/shared/base.entity';
+import { User } from '../../user/entities/user.entity';
+import { CommentEntity } from 'src/models/comment/entities/comment.entity';
 
+@Entity()
+export class Article extends BaseEntity {
   @Column()
   slug: string;
 
@@ -40,9 +38,6 @@ export class Article {
   @Column({ default: 0 })
   favoritesCount: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToMany(() => CommentEntity, (comment) => comment.article)
+  comments: CommentEntity[];
 }

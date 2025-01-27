@@ -11,6 +11,7 @@ import { ReportsModule } from './models/report/reports.module';
 import { TypeOrmConfigService } from './config/typeorm.config';
 import { ProfileModule } from './models/profile/profile.module';
 import { RoleModule } from './models/role/role.module';
+import { CommentModule } from './models/comment/comment.module';
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -27,6 +28,7 @@ const cookieSession = require('cookie-session');
     ReportsModule,
     ProfileModule,
     RoleModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [
