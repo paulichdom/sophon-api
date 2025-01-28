@@ -1,15 +1,42 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { CommentService } from './comment.service';
+
+import { Serialize } from 'src/common/interceptors/serialize.interceptor';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { CurrentUser } from '../user/decorators/current-user.decorator';
+import { User } from '../user/entities/user.entity';
+import { CommentDto } from './dto/comment.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
-@Controller('comment')
+@Controller('articles')
+@UseGuards(AuthGuard)
+@Serialize(CommentDto)
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentService.create(createCommentDto);
+  @Post('/:slug/comments')
+  async create(
+    @Body() createCommentDto: CreateCommentDto,
+    @Param('slug') slug: string,
+    @CurrentUser() user: User,
+  ) {
+    const comment = await this.commentService.create(
+      createCommentDto,
+      slug,
+      user,
+    );
+    
+    return { comment: comment };
   }
 
   @Get()
