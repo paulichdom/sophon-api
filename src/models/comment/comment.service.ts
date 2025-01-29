@@ -34,8 +34,16 @@ export class CommentService {
     return await this.commentRepository.save(comment);
   }
 
-  findAll() {
-    return `This action returns all comment`;
+  async findAll(slug: string) {
+    const comments = await this.commentRepository.find({
+      where: {
+        article: {
+          slug: slug
+        }
+      }
+    })
+
+    return comments;
   }
 
   findOne(id: number) {

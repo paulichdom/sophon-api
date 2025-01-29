@@ -35,13 +35,13 @@ export class CommentController {
       slug,
       user,
     );
-    
+
     return { comment: comment };
   }
 
-  @Get()
-  findAll() {
-    return this.commentService.findAll();
+  @Get('/:slug/comments')
+  findAll(@Param('slug') slug: string) {
+    return this.commentService.findAll(slug);
   }
 
   @Get(':id')
