@@ -14,17 +14,17 @@ import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { CurrentUser } from '../user/decorators/current-user.decorator';
 import { User } from '../user/entities/user.entity';
-import { CommentDto } from './dto/comment.dto';
+import { CommentDto, CommentListDto } from './dto/comment.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Controller('articles')
-@UseGuards(AuthGuard)
-@Serialize(CommentDto)
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Post('/:slug/comments')
+  @UseGuards(AuthGuard)
+  @Serialize(CommentDto)
   async create(
     @Body() createCommentDto: CreateCommentDto,
     @Param('slug') slug: string,
@@ -40,8 +40,10 @@ export class CommentController {
   }
 
   @Get('/:slug/comments')
-  findAll(@Param('slug') slug: string) {
-    return this.commentService.findAll(slug);
+  @Serialize(CommentListDto)
+  async findAll(@Param('slug') slug: string) {
+    const comments = await this.commentService.findAll(slug);
+    return {comments: comments }
   }
 
   @Get(':id')

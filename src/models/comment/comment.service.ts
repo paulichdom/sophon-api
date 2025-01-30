@@ -40,7 +40,8 @@ export class CommentService {
         article: {
           slug: slug
         }
-      }
+      },
+      relations: ['author', 'author.profile']
     })
 
     return comments;

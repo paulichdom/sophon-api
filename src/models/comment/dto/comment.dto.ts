@@ -24,3 +24,9 @@ export class CommentDto {
   @Type(() => CommentDataDto)
   comment: CommentDataDto;
 }
+
+export class CommentListDto {
+  @Expose()
+  @Type(() => CommentDataDto)
+  comments: CommentDataDto[]
+}
