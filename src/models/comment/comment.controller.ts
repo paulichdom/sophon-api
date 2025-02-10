@@ -16,7 +16,6 @@ import { CurrentUser } from '../user/decorators/current-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { CommentDto, CommentListDto } from './dto/comment.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Controller('articles')
 export class CommentController {
@@ -43,21 +42,12 @@ export class CommentController {
   @Serialize(CommentListDto)
   async findAll(@Param('slug') slug: string) {
     const comments = await this.commentService.findAll(slug);
-    return {comments: comments }
+    return { comments: comments };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentService.update(+id, updateCommentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
+  @Delete(':slug/comments/:commentId')
+  @UseGuards(AuthGuard)
+  remove(@Param('slug') slug: string, @Param('commentId') commentId: string) {
+    return this.commentService.remove(slug, +commentId);
   }
 }

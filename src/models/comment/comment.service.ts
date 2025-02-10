@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -6,7 +6,6 @@ import { User } from '../user/entities/user.entity';
 import { CommentEntity } from './entities/comment.entity';
 import { Article } from '../article/entities/article.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -38,24 +37,29 @@ export class CommentService {
     const comments = await this.commentRepository.find({
       where: {
         article: {
-          slug: slug
-        }
+          slug: slug,
+        },
       },
-      relations: ['author', 'author.profile']
-    })
+      relations: ['author', 'author.profile'],
+    });
 
     return comments;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
+  async remove(slug: string, commentId: number) {
+    const comment = await this.commentRepository.findOne({
+      where: { id: commentId },
+      relations: ["article"]
+    });
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
-  }
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+    if(comment.article.slug !== slug) {
+      throw new NotFoundException('Comment does not belong to the specified article')
+    }
+
+    return this.commentRepository.remove(comment);
   }
 }
