@@ -84,8 +84,9 @@ export class ArticlesController {
   }
 
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.articlesService.remove(+id);
+  @Delete(':slug')
+  @UseGuards(AuthGuard)
+  remove(@Param('slug') slug: string, @CurrentUser() user: User) {
+    return this.articlesService.remove(slug, user);
   }
 }

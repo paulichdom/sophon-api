@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -198,7 +202,8 @@ export class ArticleService {
     await this.userRepository.save(foundUser);
 
     articleToUnfavorite.favoritesCount--;
-    const unfavoritedArticle = await this.articleRepository.save(articleToUnfavorite);
+    const unfavoritedArticle =
+      await this.articleRepository.save(articleToUnfavorite);
 
     return {
       ...unfavoritedArticle,
@@ -206,8 +211,23 @@ export class ArticleService {
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} article`;
+  async remove(slug: string, user: User) {
+    let article = await this.articleRepository.findOne({
+      where: { slug },
+      relations: ['author'],
+    });
+
+    if (!article) {
+      throw new NotFoundException('Article not found');
+    }
+
+    if (user.id !== article.author.id) {
+      throw new ForbiddenException(
+        'You do not have permission to delete this article',
+      );
+    }
+
+    return this.articleRepository.remove(article);
   }
 
   async isFavorited(articleId: number, userId: number) {

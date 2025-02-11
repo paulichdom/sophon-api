@@ -45,6 +45,11 @@ export class User extends BaseEntity {
   @ManyToMany(() => Article, (article) => article.favoritedBy, {
     cascade: true,
   })
+
+  @ManyToMany(() => Article, (article) => article.favoritedBy, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinTable({ name: 'user_favorited_articles' })
   favoritedArticles: Article[];
 

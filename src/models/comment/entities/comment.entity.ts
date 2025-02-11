@@ -12,6 +12,8 @@ export class CommentEntity extends BaseEntity {
   @ManyToOne(() => User, (user) => user.comments)
   author: User
 
-  @ManyToOne(() => Article, (article) => article.comments)
+  @ManyToOne(() => Article, (article) => article.comments, {
+    onDelete: 'CASCADE'
+  })
   article: Article;
 }

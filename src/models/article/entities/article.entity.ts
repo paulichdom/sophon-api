@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 import { BaseEntity } from 'src/models/shared/base.entity';
@@ -38,6 +32,9 @@ export class Article extends BaseEntity {
   @Column({ default: 0 })
   favoritesCount: number;
 
-  @OneToMany(() => CommentEntity, (comment) => comment.article)
+  @OneToMany(() => CommentEntity, (comment) => comment.article, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
   comments: CommentEntity[];
 }
