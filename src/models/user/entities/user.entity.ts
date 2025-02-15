@@ -58,4 +58,15 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[];
+
+  @ManyToMany(() => User, user => user.followers)
+  @JoinTable({ 
+    name: 'user_followers',
+    joinColumn: { name: 'followingId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'followerId', referencedColumnName: 'id' },
+  })
+  following: User[];
+
+  @ManyToMany(() => User, user => user.following)
+  followers: User[];
 }

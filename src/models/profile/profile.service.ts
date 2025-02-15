@@ -12,29 +12,15 @@ export class ProfileService {
     private profileRepository: Repository<ProfileEntity>,
   ) {}
 
-  create(createProfileDto: CreateProfileDto) {
-    return 'This action adds a new profile';
-  }
-
-  findAll() {
-    return `This action returns all profile`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
+  async findOne(username: string) {
+    return await this.profileRepository.findOne({
+      where: { username },
+    }); 
   }
 
   async find(username: string) {
     return await this.profileRepository.find({
       where: { username },
     });
-  }
-
-  update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
   }
 }

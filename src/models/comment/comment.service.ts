@@ -20,8 +20,9 @@ export class CommentService {
     const { body } = createCommentDto.comment;
 
     const article = await this.articleRepository.findOne({ where: { slug } });
+
     if (!article) {
-      throw new Error('Article not found');
+      throw new NotFoundException(`Article ${slug} not found`);
     }
 
     const comment = this.commentRepository.create({

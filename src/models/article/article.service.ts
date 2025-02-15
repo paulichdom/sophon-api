@@ -139,6 +139,10 @@ export class ArticleService {
       relations: ['favoritedBy', 'author', 'author.profile'],
     });
 
+    if (!article) {
+      throw new NotFoundException(`Article ${slug} not found`);
+    }
+
     const userWithFavorited = await this.userRepository.findOne({
       where: { id: user.id },
       relations: ['favoritedArticles'],

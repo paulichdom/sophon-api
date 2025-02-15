@@ -1,6 +1,6 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
-export class ProfileDto {
+export class ProfileDataDto {
   @Expose()
   username: string;
 
@@ -9,4 +9,13 @@ export class ProfileDto {
 
   @Expose()
   image: string;
+
+  @Expose()
+  following: boolean;
+}
+
+export class ProfileDto {
+  @Expose()
+  @Type(() => ProfileDataDto)
+  profile: ProfileDataDto;
 }
