@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
 import { User } from './entities/user.entity';
-import { ProfileEntity } from '../profile/entities/profile.entity';
 import { RoleEntity } from '../role/entities/role.entity';
 import { Role } from '../../common/constants/role.constant';
 import { UserCreatedEvent } from './events/user.event';
@@ -13,9 +12,8 @@ import { UserCreatedEvent } from './events/user.event';
 export class UserService {
   constructor(
     private eventEmitter: EventEmitter2,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(ProfileEntity)
-    private profileRepository: Repository<ProfileEntity>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     @InjectRepository(RoleEntity)
     private roleRepository: Repository<RoleEntity>,
   ) {}
@@ -60,7 +58,7 @@ export class UserService {
   }
 
   async findByUsername(username: string) {
-    return this.userRepository.findBy({username})
+    return this.userRepository.findBy({ username });
   }
 
   async update(id: number, attrs: Partial<User>) {
