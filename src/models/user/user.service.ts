@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
@@ -6,10 +7,12 @@ import { User } from './entities/user.entity';
 import { ProfileEntity } from '../profile/entities/profile.entity';
 import { RoleEntity } from '../role/entities/role.entity';
 import { Role } from '../../common/constants/role.constant';
+import { UserCreatedEvent } from './events/user.event';
 
 @Injectable()
 export class UserService {
   constructor(
+    private eventEmitter: EventEmitter2,
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(ProfileEntity)
     private profileRepository: Repository<ProfileEntity>,
@@ -18,11 +21,7 @@ export class UserService {
   ) {}
 
   async create(username: string, email: string, password: string) {
-    const user = this.userRepository.create({ email, password });
-    user.profile = this.profileRepository.create({
-      username: username,
-      user: user,
-    });
+    const user = this.userRepository.create({ email, username, password });
 
     const defaultRoles = [Role.EDITOR, Role.GHOST];
     const roles = await this.roleRepository.findBy({
@@ -30,7 +29,17 @@ export class UserService {
     });
     user.roles = roles;
 
-    return await this.userRepository.save(user);
+    const savedUser = await this.userRepository.save(user);
+
+    this.eventEmitter.emit(
+      'user.created',
+      new UserCreatedEvent({
+        userId: user.id,
+        payload: user,
+      }),
+    );
+
+    return savedUser;
   }
 
   findOne(id: number) {
@@ -48,6 +57,10 @@ export class UserService {
       where: { email },
       relations: ['profile', 'roles'],
     });
+  }
+
+  async findByUsername(username: string) {
+    return this.userRepository.findBy({username})
   }
 
   async update(id: number, attrs: Partial<User>) {

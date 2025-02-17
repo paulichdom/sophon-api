@@ -20,10 +20,10 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { RegisterUserDto,  } from './dto/register-user.dto';
 import { UserDto } from './dto/user.dto';
 
 @Controller('users')
-@Serialize(UserDto)
 export class UserController {
   constructor(
     private usersService: UserService,
@@ -31,6 +31,7 @@ export class UserController {
   ) {}
 
   @Post('/register')
+  @Serialize(RegisterUserDto)
   async createUser(@Body() body: CreateUserDto, @Session() session: any) {
     const { username, email, password } = body;
     const user = await this.authService.register(username, email, password);
@@ -39,6 +40,7 @@ export class UserController {
   }
 
   @Post('/login')
+  @Serialize(UserDto)
   async login(@Body() body: LoginUserDto, @Session() session: any) {
     const { email, password } = body;
     const user = await this.authService.login(email, password);
@@ -48,6 +50,7 @@ export class UserController {
 
   @Get('/whoami')
   @UseGuards(AuthGuard)
+  @Serialize(UserDto)
   whoAmI(@CurrentUser() user: User) {
     return user;
   }
@@ -58,6 +61,7 @@ export class UserController {
   }
 
   @Get('/:id')
+  @Serialize(UserDto)
   async findUser(@Param('id') id: string) {
     const user = await this.usersService.findOne(parseInt(id));
     if (!user) {

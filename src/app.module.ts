@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_PIPE } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -23,6 +24,7 @@ const cookieSession = require('cookie-session');
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
+    EventEmitterModule.forRoot(),
     UserModule,
     ArticleModule,
     ReportsModule,

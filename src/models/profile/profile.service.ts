@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProfileDto } from './dto/create-profile.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProfileEntity } from './entities/profile.entity';
 import { Repository } from 'typeorm';
+import { OnEvent } from '@nestjs/event-emitter';
+import { UserCreatedEvent } from '../user/events/user.event';
 
 @Injectable()
 export class ProfileService {
@@ -23,4 +23,22 @@ export class ProfileService {
       where: { username },
     });
   }
+
+  @OnEvent('user.created')
+  async handleUserCreatedEvent(payload: UserCreatedEvent) {
+    console.log({payload})
+    const {userId, payload: user} = payload;
+    const userProfile = await this.profileRepository.create({
+      username: user.username,
+      user: user
+    })
+
+    return this.profileRepository.save(userProfile);
+  }
+
+  // On event - user created - create coresponding profile
+  /* user.profile = this.profileRepository.create({
+    username: username,
+    user: user,
+  }); */
 }

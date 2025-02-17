@@ -1,5 +1,5 @@
 import { Expose, Transform, Type } from 'class-transformer';
-import { ProfileDto } from 'src/models/profile/dto/profile.dto';
+import { ProfileDto } from '../../profile/dto/profile.dto';
 
 export class CommentDataDto {
   @Expose()

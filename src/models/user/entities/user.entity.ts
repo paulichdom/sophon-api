@@ -14,12 +14,15 @@ import { Report } from '../../report/entities/report.entity';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
 import { RoleEntity } from '../../role/entities/role.entity';
 import { CommentEntity } from '../../comment/entities/comment.entity';
-import { BaseEntity } from 'src/models/shared/base.entity';
+import { BaseEntity } from '../../shared/base.entity';
 
 @Entity()
 export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
+
+  @Column({nullable: true})
+  username: string;
 
   @Column()
   @Exclude()

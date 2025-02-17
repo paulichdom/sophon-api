@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-import { BaseEntity } from 'src/models/shared/base.entity';
+import { BaseEntity } from '../../shared/base.entity';
 import { User } from '../../user/entities/user.entity';
-import { CommentEntity } from 'src/models/comment/entities/comment.entity';
+import { CommentEntity } from '../../comment/entities/comment.entity';
 
 @Entity()
 export class Article extends BaseEntity {
