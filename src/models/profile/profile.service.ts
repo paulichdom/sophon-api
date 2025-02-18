@@ -18,27 +18,14 @@ export class ProfileService {
     }); 
   }
 
-  async find(username: string) {
-    return await this.profileRepository.find({
-      where: { username },
-    });
-  }
-
   @OnEvent('user.created')
   async handleUserCreatedEvent(payload: UserCreatedEvent) {
-    console.log({payload})
-    const {userId, payload: user} = payload;
+    const {payload: user} = payload;
     const userProfile = await this.profileRepository.create({
       username: user.username,
       user: user
     })
 
-    return this.profileRepository.save(userProfile);
+    void this.profileRepository.save(userProfile);
   }
-
-  // On event - user created - create coresponding profile
-  /* user.profile = this.profileRepository.create({
-    username: username,
-    user: user,
-  }); */
 }
