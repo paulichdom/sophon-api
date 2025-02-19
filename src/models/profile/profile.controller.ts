@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Param,
+  Post,
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
@@ -16,5 +17,10 @@ export class ProfileController {
   findOne(@Param('username') username: string) {
     const profile = this.profileService.findOne(username);
     return { profile: profile };
+  }
+
+  @Post(':username/follow')
+  async follow(@Param('username') username: string) {
+    return await this.profileService.follow(username)
   }
 }
