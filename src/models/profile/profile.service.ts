@@ -33,7 +33,13 @@ export class ProfileService {
     });
   }
 
-  async follow(username: string) {}
+  async follow(folowingUsername: string, user: User) {
+    const following = this.userRepository.findOneBy({
+      username: folowingUsername,
+    });
+
+    // TODO: Record following action
+  }
 
   async unfollow(username: string) {}
 }

@@ -1,12 +1,9 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 import { ProfileDto } from './dto/profile.dto';
+import { CurrentUser } from '../user/decorators/current-user.decorator';
+import { User } from '../user/entities/user.entity';
 
 @Controller('profiles')
 export class ProfileController {
@@ -20,7 +17,7 @@ export class ProfileController {
   }
 
   @Post(':username/follow')
-  async follow(@Param('username') username: string) {
-    return await this.profileService.follow(username)
+  async follow(@Param('username') username: string, @CurrentUser() user: User) {
+    return await this.profileService.follow(username, user);
   }
 }
