@@ -1,10 +1,8 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { RoleEntity } from '../../role/entities/role.entity';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 
-export class UserDto {
-  @Expose()
-  id: number;
-
+export class AuthUserData {
   @Expose()
   email: string;
 
@@ -22,8 +20,10 @@ export class UserDto {
   @Transform(({ obj }) => obj.profile.image)
   @Expose()
   image: string;
+}
 
-  @Transform(({ obj }) => obj.roles?.map((role: RoleEntity) => role.name) || [])
+export class AuthUserDto {
   @Expose()
-  roles: string[];
+  @Type(() => AuthUserData)
+  user: AuthUserData
 }

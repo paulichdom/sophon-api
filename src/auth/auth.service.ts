@@ -17,7 +17,7 @@ export class AuthService {
 
   async register(username: string, email: string, password: string) {
     const usersByEmail = await this.usersService.find(email);
-    const usersByUsername = await await this.usersService.findByUsername(username);
+    const usersByUsername = await this.usersService.findByUsername(username);
 
     if (usersByEmail.length) {
       throw new BadRequestException('Email in use');

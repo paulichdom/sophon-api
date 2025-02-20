@@ -20,8 +20,8 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { RegisterUserDto,  } from './dto/register-user.dto';
-import { UserDto } from './dto/user.dto';
+import { RegisteredUserDto } from './dto/registered-user.dto';
+import { AuthUserDto } from './dto/auth-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -31,28 +31,32 @@ export class UserController {
   ) {}
 
   @Post('/register')
-  @Serialize(RegisterUserDto)
+  @Serialize(RegisteredUserDto)
   async createUser(@Body() body: CreateUserDto, @Session() session: any) {
-    const { username, email, password } = body;
-    const user = await this.authService.register(username, email, password);
-    session.userId = user.id;
-    return user;
+    const { email, password, username } = body.user;
+    const registeredUser = await this.authService.register(
+      username,
+      email,
+      password,
+    );
+    session.userId = registeredUser.id;
+    return { user: registeredUser };
   }
 
   @Post('/login')
-  @Serialize(UserDto)
+  @Serialize(AuthUserDto)
   async login(@Body() body: LoginUserDto, @Session() session: any) {
-    const { email, password } = body;
-    const user = await this.authService.login(email, password);
-    session.userId = user.id;
-    return user;
+    const { email, password } = body.user;
+    const authUser = await this.authService.login(email, password);
+    session.userId = authUser.id;
+    return { user: authUser };
   }
 
   @Get('/whoami')
   @UseGuards(AuthGuard)
-  @Serialize(UserDto)
+  @Serialize(AuthUserDto)
   whoAmI(@CurrentUser() user: User) {
-    return user;
+    return { user };
   }
 
   @Post('/logout')
@@ -61,27 +65,40 @@ export class UserController {
   }
 
   @Get('/:id')
-  @Serialize(UserDto)
+  @UseGuards(AuthGuard)
+  @Serialize(AuthUserDto)
   async findUser(@Param('id') id: string) {
-    const user = await this.usersService.findOne(parseInt(id));
-    if (!user) {
+    const foundUserId = await this.usersService.findOne(parseInt(id));
+    if (!foundUserId) {
       throw new NotFoundException('User not found');
     }
-    return user;
+    return { user: foundUserId };
   }
 
   @Get()
-  findAllUsers(@Query('email') email: string) {
-    return this.usersService.find(email);
+  @UseGuards(AuthGuard)
+  @Serialize(AuthUserDto)
+  async findByEmail(@Query('email') email: string) {
+    const foundUserEmail = await this.usersService.find(email);
+    console.log({foundUserEmail})
+    return { user: foundUserEmail };
   }
 
   @Delete('/:id')
-  removeUser(@Param('id') id: string) {
-    return this.usersService.remove(parseInt(id));
+  @UseGuards(AuthGuard)
+  @Serialize(AuthUserDto)
+  async removeUser(@Param('id') id: string) {
+    const deletedUser = await this.usersService.remove(parseInt(id));
+    console.log({deletedUser})
+    return { user: deletedUser };
   }
 
   @Patch('/:id')
-  updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    return this.usersService.update(parseInt(id), body);
+  @UseGuards(AuthGuard)
+  @Serialize(AuthUserDto)
+  async updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    const updatedUser = await this.usersService.update(parseInt(id), body.user);
+    console.log({updatedUser})
+    return { user: updatedUser };
   }
 }

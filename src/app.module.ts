@@ -41,10 +41,13 @@ const cookieSession = require('cookie-session');
       useValue: new ValidationPipe({
         whitelist: true,
         enableDebugMessages: true,
+        forbidNonWhitelisted: true,
+        transform: true,
       }),
     },
   ],
 })
+
 export class AppModule {
   constructor(private configService: ConfigService) {}
 

@@ -44,6 +44,7 @@ export class UserService {
     if (!id) {
       return null;
     }
+    
     return this.userRepository.findOne({
       where: { id },
       relations: ['profile', 'roles'],
@@ -51,21 +52,33 @@ export class UserService {
   }
 
   find(email: string) {
-    return this.userRepository.find({
+    const user = this.userRepository.find({
       where: { email },
       relations: ['profile', 'roles'],
     });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   async findByUsername(username: string) {
-    return this.userRepository.findBy({ username });
+    const user = this.userRepository.findBy({ username });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   async update(id: number, attrs: Partial<User>) {
     const user = await this.findOne(id);
 
     if (!user) {
-      throw new NotFoundException('user not found');
+      throw new NotFoundException('User not found');
     }
 
     Object.assign(user, attrs);
