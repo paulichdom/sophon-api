@@ -1,9 +1,10 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 import { ProfileDto } from './dto/profile.dto';
 import { CurrentUser } from '../user/decorators/current-user.decorator';
 import { User } from '../user/entities/user.entity';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 
 @Controller('profiles')
 export class ProfileController {
@@ -17,7 +18,11 @@ export class ProfileController {
   }
 
   @Post(':username/follow')
-  async follow(@Param('username') username: string, @CurrentUser() user: User) {
+  @UseGuards(AuthGuard)
+  async follow(
+    @Param('username') username: string,
+    @CurrentUser() user: User,
+  ) {
     return await this.profileService.follow(username, user);
   }
 }
