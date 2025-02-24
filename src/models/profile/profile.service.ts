@@ -36,23 +36,25 @@ export class ProfileService {
   }
 
   async follow(folowingUsername: string, user: User) {
-    // TODO: get current user relations: following and followers
-    // depending on the helper functions, see chat
     if (!folowingUsername) {
       throw new HttpException('Username not provided', HttpStatus.BAD_REQUEST);
     }
 
-    const following = await this.userRepository.findOne({
-      where: { username: folowingUsername },
-      relations: ['followers'],
+    const follower = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: ['following'],
     });
 
-    if (!following) {
-      throw new Error('Following user not found');
-    }
-    console.log({folowingUsername, following, user})
+    const following = await this.userRepository.findOne({
+      where: { username: folowingUsername },
+      relations: ['profile','followers'],
+    });
 
-    if (following.email === user.email) {
+    if (!follower || !following) {
+      throw new Error('User not found');
+    }
+
+    if (following.email === follower.email) {
       throw new HttpException(
         'This user cannot be added to your following list.',
         HttpStatus.BAD_REQUEST,
@@ -60,37 +62,74 @@ export class ProfileService {
     }
 
     const hasFollowers = following.followers.length > 0;
-    const isFollowing = hasFollowers && following.followers.some(follower => follower.id === user.id);
+    const isFollowing =
+      hasFollowers &&
+      following.followers.some(
+        (followerEntity) => followerEntity.id === follower.id,
+      );
 
-    if(!isFollowing) {
-      const followResult = await this.entityManager.transaction(async (transactionalEntityManager: EntityManager) => {
-        await this.addFollowing(transactionalEntityManager, user, following);
-        await this.addFollower(transactionalEntityManager, following, user);
-      })
+    if (!isFollowing) {
+      await this.entityManager.transaction(
+        async (transactionalEntityManager: EntityManager) => {
+          await this.addFollowing(
+            transactionalEntityManager,
+            follower,
+            following,
+          );
+          await this.addFollower(
+            transactionalEntityManager,
+            following,
+            follower,
+          );
+        },
+      );
+    }
 
-      console.log({followResult})
+    const {username, bio, image} = following.profile
+
+    return {
+      username,
+      bio,
+      image,
+      following: true
     }
   }
 
   async unfollow(username: string) {}
 
-  private async addFollowing(entityManager: EntityManager, user: User, following: User) {
+  private async addFollowing(
+    entityManager: EntityManager,
+    user: User,
+    following: User,
+  ) {
     user.following.push(following);
     await entityManager.save(user);
   }
-  
-  private async addFollower(entityManager: EntityManager, following: User, user: User) {
+
+  private async addFollower(
+    entityManager: EntityManager,
+    following: User,
+    user: User,
+  ) {
     following.followers.push(user);
     await entityManager.save(following);
   }
 
-  private async removeFollowing(entityManager: EntityManager, user: User, following: User) {
-    user.following = user.following.filter(f => f.id !== following.id);
+  private async removeFollowing(
+    entityManager: EntityManager,
+    user: User,
+    following: User,
+  ) {
+    user.following = user.following.filter((f) => f.id !== following.id);
     await entityManager.save(user);
   }
-  
-  private async removeFollower(entityManager: EntityManager, following: User, user: User) {
-    following.followers = following.followers.filter(f => f.id !== user.id);
+
+  private async removeFollower(
+    entityManager: EntityManager,
+    following: User,
+    user: User,
+  ) {
+    following.followers = following.followers.filter((f) => f.id !== user.id);
     await entityManager.save(following);
   }
 }

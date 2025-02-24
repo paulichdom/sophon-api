@@ -5,6 +5,7 @@ import { ProfileDto } from './dto/profile.dto';
 import { CurrentUser } from '../user/decorators/current-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import { profile } from 'console';
 
 @Controller('profiles')
 export class ProfileController {
@@ -19,10 +20,9 @@ export class ProfileController {
 
   @Post(':username/follow')
   @UseGuards(AuthGuard)
-  async follow(
-    @Param('username') username: string,
-    @CurrentUser() user: User,
-  ) {
-    return await this.profileService.follow(username, user);
+  @Serialize(ProfileDto)
+  async follow(@Param('username') username: string, @CurrentUser() user: User) {
+    const followingProfile = await this.profileService.follow(username, user);
+    return { profile: followingProfile };
   }
 }
