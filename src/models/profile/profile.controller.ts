@@ -13,8 +13,8 @@ export class ProfileController {
 
   @Get(':username')
   @Serialize(ProfileDto)
-  findOne(@Param('username') username: string) {
-    const profile = this.profileService.findOne(username);
+  async findOne(@Param('username') username: string, @CurrentUser() user: User) {
+    const profile = await this.profileService.findOne(username, user);
     return { profile: profile };
   }
 

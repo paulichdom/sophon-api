@@ -29,10 +29,24 @@ export class ProfileService {
     void this.profileRepository.save(userProfile);
   }
 
-  async findOne(username: string) {
-    return await this.profileRepository.findOne({
-      where: { username },
+  async findOne(username: string, user: User) {
+    const follower = await this.userRepository.findOne({
+      where: { id: user.id },
     });
+
+    const following = await this.userRepository.findOne({
+      where: { username },
+      relations: ['profile', 'followers'],
+    });
+
+    const { username: profileUsername, bio, image } = following.profile;
+
+    return {
+      username: profileUsername,
+      bio,
+      image,
+      following: this.isFollowing(follower, following),
+    };
   }
 
   async follow(folowingUsername: string, user: User) {
@@ -47,7 +61,7 @@ export class ProfileService {
 
     const following = await this.userRepository.findOne({
       where: { username: folowingUsername },
-      relations: ['profile','followers'],
+      relations: ['profile', 'followers'],
     });
 
     if (!follower || !following) {
@@ -61,12 +75,7 @@ export class ProfileService {
       );
     }
 
-    const hasFollowers = following.followers.length > 0;
-    const isFollowing =
-      hasFollowers &&
-      following.followers.some(
-        (followerEntity) => followerEntity.id === follower.id,
-      );
+    const isFollowing = this.isFollowing(follower, following);
 
     if (!isFollowing) {
       await this.entityManager.transaction(
@@ -85,14 +94,14 @@ export class ProfileService {
       );
     }
 
-    const {username, bio, image} = following.profile
+    const { username, bio, image } = following.profile;
 
     return {
       username,
       bio,
       image,
-      following: true
-    }
+      following: true,
+    };
   }
 
   async unfollow(username: string) {}
@@ -131,5 +140,12 @@ export class ProfileService {
   ) {
     following.followers = following.followers.filter((f) => f.id !== user.id);
     await entityManager.save(following);
+  }
+
+  private isFollowing(follower: User, following: User): boolean {
+    const hasFollowers = following.followers.length > 0;
+    return following.followers.some(
+      (followerEntity) => followerEntity.id === follower.id,
+    );
   }
 }
