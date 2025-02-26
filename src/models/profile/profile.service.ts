@@ -100,11 +100,57 @@ export class ProfileService {
       username,
       bio,
       image,
-      following: true,
+      following: this.isFollowing(follower, following),
     };
   }
 
-  async unfollow(username: string) {}
+  async unfollow(folowingUsername: string, user: User) {
+    if (!folowingUsername) {
+      throw new HttpException('Username not provided', HttpStatus.BAD_REQUEST);
+    }
+
+    const follower = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: ['following'],
+    });
+
+    const following = await this.userRepository.findOne({
+      where: { username: folowingUsername },
+      relations: ['profile', 'followers'],
+    });
+
+    if (!follower || !following) {
+      throw new Error('User not found');
+    }
+
+    const isFollowing = this.isFollowing(follower, following);
+
+    if (isFollowing) {
+      await this.entityManager.transaction(
+        async (trasactionalEntityManager: EntityManager) => {
+          await this.removeFollowing(
+            trasactionalEntityManager,
+            follower,
+            following,
+          );
+          await this.removeFollower(
+            trasactionalEntityManager,
+            following,
+            follower,
+          );
+        },
+      );
+    }
+
+    const { username, bio, image } = following.profile;
+
+    return {
+      username,
+      bio,
+      image,
+      following: this.isFollowing(follower, following),
+    };
+  }
 
   private async addFollowing(
     entityManager: EntityManager,
@@ -129,7 +175,9 @@ export class ProfileService {
     user: User,
     following: User,
   ) {
-    user.following = user.following.filter((f) => f.id !== following.id);
+    user.following = user.following.filter(
+      (followingItem) => followingItem.id !== following.id,
+    );
     await entityManager.save(user);
   }
 
@@ -138,12 +186,13 @@ export class ProfileService {
     following: User,
     user: User,
   ) {
-    following.followers = following.followers.filter((f) => f.id !== user.id);
+    following.followers = following.followers.filter(
+      (followerItem) => followerItem.id !== user.id,
+    );
     await entityManager.save(following);
   }
 
   private isFollowing(follower: User, following: User): boolean {
-    const hasFollowers = following.followers.length > 0;
     return following.followers.some(
       (followerEntity) => followerEntity.id === follower.id,
     );
