@@ -13,6 +13,7 @@ import { TypeOrmConfigService } from './config/typeorm.config';
 import { ProfileModule } from './models/profile/profile.module';
 import { RoleModule } from './models/role/role.module';
 import { CommentModule } from './models/comment/comment.module';
+import { TagModule } from './models/tag/tag.module';
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -31,6 +32,7 @@ const cookieSession = require('cookie-session');
     ProfileModule,
     RoleModule,
     CommentModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [
