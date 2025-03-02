@@ -25,6 +25,8 @@ export class ArticleService {
       slug: this.slugify(createArticleDto.title),
     });
 
+    // TODO: create new tags and associate them with the article entity
+
     const savedArticle = await this.articleRepository.save(article);
 
     return {
