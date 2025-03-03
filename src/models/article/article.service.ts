@@ -10,22 +10,35 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article } from './entities/article.entity';
 import { User } from '../user/entities/user.entity';
+import { Tag } from '../tag/entities/tag.entity';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article) private articleRepository: Repository<Article>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Tag) private tagRepository: Repository<Tag>,
   ) {}
 
   async create(createArticleDto: CreateArticleDto, user: User) {
+    /**
+     * TODO:
+     * 1) analyze tag impl. Refactor where neccesary
+     * 2) remove 'tagList' from entity
+     * 3) adjust DTO to return the correct tagList format
+     */
+    let tags = [];
+
+    for (const tag in createArticleDto.tagList) {
+      tags.push(await this.createOrGetTag(tag));
+    }
+
     const article = this.articleRepository.create({
       ...createArticleDto,
       author: user,
       slug: this.slugify(createArticleDto.title),
+      tags,
     });
-
-    // TODO: create new tags and associate them with the article entity
 
     const savedArticle = await this.articleRepository.save(article);
 
@@ -245,6 +258,18 @@ export class ArticleService {
       .getCount();
 
     return isFavorited > 0;
+  }
+
+  async createOrGetTag(name: string): Promise<Tag> {
+    let tag = await this.tagRepository.findOne({ where: { name } });
+    if (!tag) {
+      const newTag = this.tagRepository.create({
+        name,
+      });
+      tag = await this.tagRepository.save(newTag);
+    }
+
+    return tag;
   }
 
   slugify(input: string) {
