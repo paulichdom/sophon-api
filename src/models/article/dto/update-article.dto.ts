@@ -1,8 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateArticleDto } from './create-article.dto';
-import { IsString } from 'class-validator';
+import { CreateArticleData, CreateArticleDto } from './create-article.dto';
+import { IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class UpdateArticleDto extends PartialType(CreateArticleDto) {
+export class UpdateArticleData extends PartialType(CreateArticleData) {
   @IsString()
   title: string;
 
@@ -11,4 +12,10 @@ export class UpdateArticleDto extends PartialType(CreateArticleDto) {
 
   @IsString()
   body: string;
+}
+
+export class UpdateArticleDto {
+  @ValidateNested()
+  @Type(() => UpdateArticleData)
+  article: UpdateArticleData;
 }

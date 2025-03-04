@@ -17,8 +17,7 @@ import { User } from '../user/entities/user.entity';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { CurrentUser } from '../user/decorators/current-user.decorator';
-import { ArticleListDto } from './dto/article-list.dto';
-import { SingleArticleDto } from './dto/single-article.dto';
+import { ArticleDto, ArticleListDto } from './dto/article.dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -26,7 +25,7 @@ export class ArticlesController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @Serialize(SingleArticleDto)
+  @Serialize(ArticleDto)
   async createArticle(
     @Body() createArticleDto: CreateArticleDto,
     @CurrentUser() user: User,
@@ -50,14 +49,14 @@ export class ArticlesController {
   }
 
   @Get('/:slug')
-  @Serialize(SingleArticleDto)
+  @Serialize(ArticleDto)
   async findOne(@Param('slug') slug: string, @CurrentUser() user: User) {
     const article = await this.articlesService.findOne(slug, user);
     return { article: article };
   }
 
   @Put('/:slug')
-  @Serialize(SingleArticleDto)
+  @Serialize(ArticleDto)
   async update(
     @Param('slug') slug: string,
     @CurrentUser() user: User,
@@ -68,7 +67,7 @@ export class ArticlesController {
   }
 
   @Post('/:slug/favorite')
-  @Serialize(SingleArticleDto)
+  @Serialize(ArticleDto)
   @UseGuards(AuthGuard)
   async favorite(@Param('slug') slug: string, @CurrentUser() user: User) {
     const favoritedArticle = await this.articlesService.favorite(slug, user);
@@ -76,7 +75,7 @@ export class ArticlesController {
   }
 
   @Delete('/:slug/favorite')
-  @Serialize(SingleArticleDto)
+  @Serialize(ArticleDto)
   @UseGuards(AuthGuard)
   async unfavorite(@Param('slug') slug: string, @CurrentUser() user: User) {
     const unfavoritedArticle = await this.articlesService.unfavorite(slug, user);

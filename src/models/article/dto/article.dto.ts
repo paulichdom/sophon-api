@@ -1,7 +1,7 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { ProfileDto } from '../../profile/dto/profile.dto';
 
-export class ArticleDto {
+export class ArticleData {
   @Expose() id: number;
   @Expose() slug: string;
   @Expose() title: string;
@@ -16,4 +16,19 @@ export class ArticleDto {
   @Transform(({ obj }) => obj.author.profile)
   @Expose()
   author: ProfileDto;
+}
+
+export class ArticleDto {
+  @Expose()
+  @Type(() => ArticleData)
+  article: ArticleData;
+}
+
+export class ArticleListDto {
+  @Expose()
+  @Type(() => ArticleDto)
+  articles: ArticleDto[];
+
+  @Expose()
+  articlesCount: number;
 }

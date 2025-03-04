@@ -20,7 +20,7 @@ export class ArticleService {
     @InjectRepository(Tag) private tagRepository: Repository<Tag>,
   ) {}
 
-  async create(createArticleDto: CreateArticleDto, user: User) {
+  async create({ article: articleData }: CreateArticleDto, user: User) {
     /**
      * TODO:
      * 1) analyze tag impl. Refactor where neccesary
@@ -29,18 +29,20 @@ export class ArticleService {
      */
     let tags = [];
 
-    for (const tag in createArticleDto.tagList) {
-      tags.push(await this.createOrGetTag(tag));
+    if (articleData.tagList && articleData.tagList.length > 0) {
+      for (const tag of articleData.tagList) {
+        tags.push(await this.createOrGetTag(tag));
+      }
     }
 
-    const article = this.articleRepository.create({
-      ...createArticleDto,
+    const newArticle = this.articleRepository.create({
+      ...articleData,
       author: user,
-      slug: this.slugify(createArticleDto.title),
+      slug: this.slugify(articleData.title),
       tags,
     });
 
-    const savedArticle = await this.articleRepository.save(article);
+    const savedArticle = await this.articleRepository.save(newArticle);
 
     return {
       ...savedArticle,
@@ -117,7 +119,11 @@ export class ArticleService {
     };
   }
 
-  async update(slug: string, user: User, updateArticleDto: UpdateArticleDto) {
+  async update(
+    slug: string,
+    user: User,
+    { article: articleData }: UpdateArticleDto,
+  ) {
     const articleToUpdate = await this.articleRepository.findOne({
       where: { slug },
       relations: ['author', 'author.profile'],
@@ -128,9 +134,9 @@ export class ArticleService {
     }
 
     const updateArticlePayload = {
-      ...updateArticleDto,
-      slug: updateArticleDto.title
-        ? this.slugify(updateArticleDto.title)
+      ...articleData,
+      slug: articleData.title
+        ? this.slugify(articleData.title)
         : articleToUpdate.slug,
     };
 
@@ -260,8 +266,10 @@ export class ArticleService {
     return isFavorited > 0;
   }
 
-  async createOrGetTag(name: string): Promise<Tag> {
+  async createOrGetTag(tagName: string): Promise<Tag> {
+    const name = tagName.trim().toLowerCase();
     let tag = await this.tagRepository.findOne({ where: { name } });
+    
     if (!tag) {
       const newTag = this.tagRepository.create({
         name,
