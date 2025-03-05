@@ -39,9 +39,12 @@ export class ArticlesController {
 
   @Get()
   @Serialize(ArticleListDto)
-  async findAll(@Query() query, @CurrentUser() user: User,) {
-    const { articles, articlesCount } =
-      await this.articlesService.findAll(user, query);
+  async findAll(@Query() query, @CurrentUser() user: User) {
+    const { articles, articlesCount } = await this.articlesService.findAll(
+      user,
+      query,
+    );
+    console.log('Contoler', { articles });
     return {
       articles: articles,
       articlesCount: articlesCount,
@@ -62,7 +65,11 @@ export class ArticlesController {
     @CurrentUser() user: User,
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
-    const updatedArticle = await this.articlesService.update(slug, user, updateArticleDto);
+    const updatedArticle = await this.articlesService.update(
+      slug,
+      user,
+      updateArticleDto,
+    );
     return { article: updatedArticle };
   }
 
@@ -78,10 +85,12 @@ export class ArticlesController {
   @Serialize(ArticleDto)
   @UseGuards(AuthGuard)
   async unfavorite(@Param('slug') slug: string, @CurrentUser() user: User) {
-    const unfavoritedArticle = await this.articlesService.unfavorite(slug, user);
+    const unfavoritedArticle = await this.articlesService.unfavorite(
+      slug,
+      user,
+    );
     return { article: unfavoritedArticle };
   }
-
 
   @Delete(':slug')
   @UseGuards(AuthGuard)

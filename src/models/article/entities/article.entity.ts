@@ -27,9 +27,6 @@ export class Article extends BaseEntity {
   @Column({ default: '' })
   body: string;
 
-  @Column('text', { array: true, default: [] })
-  tagList: string[];
-
   @ManyToMany(() => Tag, (tag) => tag.articles)
   @JoinTable({
     name: 'article_tags',

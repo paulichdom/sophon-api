@@ -7,7 +7,11 @@ export class ArticleData {
   @Expose() title: string;
   @Expose() description: string;
   @Expose() body: string;
-  @Expose() tagList: string[];
+
+  @Transform(({ obj }) => obj.tags.map((tag) => tag.name))
+  @Expose()
+  tagList: string[];
+
   @Expose() createdAt: string;
   @Expose() updatedAt: string;
   @Expose() favorited: boolean;
@@ -26,8 +30,8 @@ export class ArticleDto {
 
 export class ArticleListDto {
   @Expose()
-  @Type(() => ArticleDto)
-  articles: ArticleDto[];
+  @Type(() => ArticleData)
+  articles: ArticleData[];
 
   @Expose()
   articlesCount: number;

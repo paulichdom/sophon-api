@@ -21,12 +21,6 @@ export class ArticleService {
   ) {}
 
   async create({ article: articleData }: CreateArticleDto, user: User) {
-    /**
-     * TODO:
-     * 1) analyze tag impl. Refactor where neccesary
-     * 2) remove 'tagList' from entity
-     * 3) adjust DTO to return the correct tagList format
-     */
     let tags = [];
 
     if (articleData.tagList && articleData.tagList.length > 0) {
@@ -55,7 +49,8 @@ export class ArticleService {
 
     queryBuilder
       .leftJoinAndSelect('article.author', 'author')
-      .leftJoinAndSelect('author.profile', 'profile');
+      .leftJoinAndSelect('author.profile', 'profile')
+      .leftJoinAndSelect('article.tags', 'tags');
 
     if ('author' in query) {
       queryBuilder.andWhere('profile.username = :username', {
@@ -63,8 +58,9 @@ export class ArticleService {
       });
     }
 
+    // TODO: Fix this, filter after join, remove this clause
     if ('tag' in query) {
-      queryBuilder.andWhere(':tag = ANY(article.tagList)', { tag: query.tag });
+      queryBuilder.andWhere('tags.name = :tag', { tag: query.tag });
     }
 
     if ('favorited' in query) {
@@ -104,7 +100,7 @@ export class ArticleService {
   async findOne(slug: string, user: User) {
     const article = await this.articleRepository.findOne({
       where: { slug },
-      relations: ['author', 'author.profile'],
+      relations: ['tags', 'author', 'author.profile'],
     });
 
     if (!article) {
@@ -269,7 +265,7 @@ export class ArticleService {
   async createOrGetTag(tagName: string): Promise<Tag> {
     const name = tagName.trim().toLowerCase();
     let tag = await this.tagRepository.findOne({ where: { name } });
-    
+
     if (!tag) {
       const newTag = this.tagRepository.create({
         name,
