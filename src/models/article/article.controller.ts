@@ -44,7 +44,6 @@ export class ArticlesController {
       user,
       query,
     );
-    console.log('Contoler', { articles });
     return {
       articles: articles,
       articlesCount: articlesCount,

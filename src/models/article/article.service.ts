@@ -58,9 +58,10 @@ export class ArticleService {
       });
     }
 
-    // TODO: Fix this, filter after join, remove this clause
     if ('tag' in query) {
-      queryBuilder.andWhere('tags.name = :tag', { tag: query.tag });
+      queryBuilder
+        .innerJoin('article.tags', 'filterTag')
+        .andWhere('filterTag.name = :tag', { tag: query.tag });
     }
 
     if ('favorited' in query) {
