@@ -93,7 +93,9 @@ export class ArticlesController {
 
   @Delete(':slug')
   @UseGuards(AuthGuard)
-  remove(@Param('slug') slug: string, @CurrentUser() user: User) {
-    return this.articlesService.remove(slug, user);
+  @Serialize(ArticleDto)
+  async remove(@Param('slug') slug: string, @CurrentUser() user: User) {
+    const deletedArticle = await this.articlesService.remove(slug, user);
+    return { article: deletedArticle };
   }
 }

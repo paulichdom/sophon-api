@@ -123,7 +123,7 @@ export class ArticleService {
   ) {
     const articleToUpdate = await this.articleRepository.findOne({
       where: { slug },
-      relations: ['author', 'author.profile'],
+      relations: ['author', 'author.profile', 'tags'],
     });
 
     if (!articleToUpdate) {
@@ -154,7 +154,7 @@ export class ArticleService {
   async favorite(slug: string, user: User) {
     let article = await this.articleRepository.findOne({
       where: { slug },
-      relations: ['favoritedBy', 'author', 'author.profile'],
+      relations: ['favoritedBy', 'author', 'author.profile', 'tags'],
     });
 
     if (!article) {
@@ -200,7 +200,7 @@ export class ArticleService {
 
     const articleToUnfavorite = await this.articleRepository.findOne({
       where: { slug },
-      relations: ['author', 'author.profile'],
+      relations: ['author', 'author.profile', 'tags'],
     });
 
     if (!articleToUnfavorite) {
@@ -233,10 +233,12 @@ export class ArticleService {
     };
   }
 
+  
   async remove(slug: string, user: User) {
+    // TODO: Allow delete if there are comments? Or throw ConflictException
     let article = await this.articleRepository.findOne({
       where: { slug },
-      relations: ['author'],
+      relations: ['author', 'tags'],
     });
 
     if (!article) {
@@ -249,7 +251,7 @@ export class ArticleService {
       );
     }
 
-    return this.articleRepository.remove(article);
+    return await this.articleRepository.remove(article);
   }
 
   async isFavorited(articleId: number, userId: number) {
