@@ -8,7 +8,6 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './models/user/user.module';
 import { ArticleModule } from './models/article/article.module';
-import { ReportsModule } from './models/report/reports.module';
 import { TypeOrmConfigService } from './config/typeorm.config';
 import { ProfileModule } from './models/profile/profile.module';
 import { RoleModule } from './models/role/role.module';
@@ -28,7 +27,6 @@ const cookieSession = require('cookie-session');
     EventEmitterModule.forRoot(),
     UserModule,
     ArticleModule,
-    ReportsModule,
     ProfileModule,
     RoleModule,
     CommentModule,

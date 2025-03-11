@@ -11,7 +11,7 @@ import { Exclude } from 'class-transformer';
 import { BaseEntity } from '../../shared/base.entity';
 import { User } from '../../user/entities/user.entity';
 import { CommentEntity } from '../../comment/entities/comment.entity';
-import { Tag } from 'src/models/tag/entities/tag.entity';
+import { Tag } from '../../tag/entities/tag.entity';
 
 @Entity()
 export class Article extends BaseEntity {

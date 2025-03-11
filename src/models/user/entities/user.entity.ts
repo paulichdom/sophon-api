@@ -10,7 +10,6 @@ import {
 import { Exclude } from 'class-transformer';
 
 import { Article } from '../../article/entities/article.entity';
-import { Report } from '../../report/entities/report.entity';
 import { ProfileEntity } from '../../profile/entities/profile.entity';
 import { RoleEntity } from '../../role/entities/role.entity';
 import { CommentEntity } from '../../comment/entities/comment.entity';
@@ -58,9 +57,6 @@ export class User extends BaseEntity {
 
   @OneToMany(() => CommentEntity, (comment) => comment.author)
   comments: CommentEntity[];
-
-  @OneToMany(() => Report, (report) => report.user)
-  reports: Report[];
 
   @ManyToMany(() => User, user => user.followers)
   @JoinTable({ 
