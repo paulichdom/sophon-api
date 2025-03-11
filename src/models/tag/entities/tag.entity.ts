@@ -1,6 +1,5 @@
-import { MaxLength, MinLength } from 'class-validator';
-import { Article } from 'src/models/article/entities/article.entity';
-import { BaseEntity } from 'src/models/shared/base.entity';
+import { Article } from '../../article/entities/article.entity';
+import { BaseEntity } from '../../shared/base.entity';
 import { Column, Entity, ManyToMany } from 'typeorm';
 
 @Entity({ name: 'tag' })
