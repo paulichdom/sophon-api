@@ -58,6 +58,9 @@ export class AppModule {
       .apply(
         cookieSession({
           keys: [this.configService.get('COOKIE_KEY')],
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: process.env.NODE_ENV === 'production' ? "none" : 'lax',
+          domain: process.env.NODE_ENV === 'production' ? undefined : 'localhost'
         }),
       )
       .forRoutes('*');
