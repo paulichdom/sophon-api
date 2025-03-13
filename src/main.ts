@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from "@nestjs/platform-express"
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api/v1');
+  app.set('trust proxy', 1)
 
   const config = new DocumentBuilder()
     .setTitle('Sophon Api')
