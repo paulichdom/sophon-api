@@ -8,7 +8,16 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api/v1');
-  app.set('trust proxy', 1)
+  app.set('trust proxy', 1);
+
+  const cors_origin = process.env.LOCAL_CLIENT;
+
+  app.enableCors({
+    origin: [cors_origin],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Sophon Api')
