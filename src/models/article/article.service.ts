@@ -73,12 +73,19 @@ export class ArticleService {
         });
     }
 
-    queryBuilder.leftJoinAndSelect(
-      'article.favoritedBy',
-      'favoriteCheck',
-      'favoriteCheck.id = :userId',
-      { userId: user.id },
-    );
+    if (user) {
+      queryBuilder.leftJoinAndSelect(
+        'article.favoritedBy',
+        'favoriteCheck',
+        'favoriteCheck.id = :userId',
+        { userId: user.id },
+      );
+    } else {
+      queryBuilder.leftJoinAndSelect(
+        'article.favoritedBy',
+        'favoriteCheck',
+      );
+    }
 
     const [articles, count] = await queryBuilder.getManyAndCount();
 
