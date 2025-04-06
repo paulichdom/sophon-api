@@ -81,10 +81,7 @@ export class ArticleService {
         { userId: user.id },
       );
     } else {
-      queryBuilder.leftJoinAndSelect(
-        'article.favoritedBy',
-        'favoriteCheck',
-      );
+      queryBuilder.leftJoinAndSelect('article.favoritedBy', 'favoriteCheck');
     }
 
     const [articles, count] = await queryBuilder.getManyAndCount();
@@ -105,7 +102,7 @@ export class ArticleService {
     };
   }
 
-  async findOne(slug: string, user: User) {
+  async findOne(slug: string, user?: User) {
     const article = await this.articleRepository.findOne({
       where: { slug },
       relations: ['tags', 'author', 'author.profile'],
@@ -115,7 +112,9 @@ export class ArticleService {
       throw new NotFoundException(`Article ${slug} not found`);
     }
 
-    const isFavorited = await this.isFavorited(article.id, user.id);
+    const isFavorited = user
+      ? await this.isFavorited(article.id, user.id)
+      : false;
 
     return {
       ...article,
@@ -240,7 +239,6 @@ export class ArticleService {
     };
   }
 
-  
   async remove(slug: string, user: User) {
     // TODO: Allow delete if there are comments? Or throw ConflictException
     let article = await this.articleRepository.findOne({
