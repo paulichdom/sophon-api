@@ -11,6 +11,7 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article } from './entities/article.entity';
 import { User } from '../user/entities/user.entity';
 import { Tag } from '../tag/entities/tag.entity';
+import { ArticleProvider } from './article.provider';
 
 @Injectable()
 export class ArticleService {
@@ -18,6 +19,7 @@ export class ArticleService {
     @InjectRepository(Article) private articleRepository: Repository<Article>,
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Tag) private tagRepository: Repository<Tag>,
+    private readonly articleProvider: ArticleProvider,
   ) {}
 
   async create({ article: articleData }: CreateArticleDto, user: User) {
@@ -293,5 +295,9 @@ export class ArticleService {
       .replace(/[\s_]+/g, '-')
       .replace(/[^\w-]+/g, '')
       .slice(0, 50);
+  }
+
+  async generate(prompt: string) {
+    return this.articleProvider.generateArticleObject(prompt);
   }
 }

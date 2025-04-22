@@ -98,4 +98,10 @@ export class ArticlesController {
     const deletedArticle = await this.articlesService.remove(slug, user);
     return { article: deletedArticle };
   }
+
+  @Post('/generate')
+  @UseGuards(AuthGuard)
+  async generate(@Body() body: { prompt: string }) {
+    return await this.articlesService.generate(body.prompt);
+  }
 }
