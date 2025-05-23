@@ -48,8 +48,9 @@ export class UserController {
   async login(@Body() body: LoginUserDto, @Session() session: any) {
     const { email, password } = body.user;
     const authUser = await this.authService.login(email, password);
-    session.userId = authUser.id;
-    return { user: authUser };
+    session.userId = authUser.user.id;
+    
+    return authUser;
   }
 
   @Get('/whoami')
@@ -80,7 +81,6 @@ export class UserController {
   @Serialize(AuthUserDto)
   async findByEmail(@Query('email') email: string) {
     const foundUserEmail = await this.usersService.find(email);
-    console.log({foundUserEmail})
     return { user: foundUserEmail };
   }
 
@@ -89,7 +89,6 @@ export class UserController {
   @Serialize(AuthUserDto)
   async removeUser(@Param('id') id: string) {
     const deletedUser = await this.usersService.remove(parseInt(id));
-    console.log({deletedUser})
     return { user: deletedUser };
   }
 
@@ -98,7 +97,6 @@ export class UserController {
   @Serialize(AuthUserDto)
   async updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
     const updatedUser = await this.usersService.update(parseInt(id), body.user);
-    console.log({updatedUser})
     return { user: updatedUser };
   }
 }

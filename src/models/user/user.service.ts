@@ -51,8 +51,8 @@ export class UserService {
     });
   }
 
-  find(email: string) {
-    const user = this.userRepository.find({
+  async find(email: string) {
+    const user = await this.userRepository.find({
       where: { email },
       relations: ['profile', 'roles'],
     });
@@ -66,6 +66,19 @@ export class UserService {
 
   async findByUsername(username: string) {
     const user = this.userRepository.findBy({ username });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+      relations: ['profile', 'roles'],
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');

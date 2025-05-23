@@ -1,6 +1,4 @@
 import { Expose, Transform, Type } from 'class-transformer';
-import { RoleEntity } from '../../role/entities/role.entity';
-import { IsNotEmpty, ValidateNested } from 'class-validator';
 
 export class AuthUserData {
   @Expose()
