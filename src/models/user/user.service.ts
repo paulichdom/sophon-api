@@ -6,7 +6,7 @@ import { In, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { RoleEntity } from '../role/entities/role.entity';
 import { Role } from '../../common/constants/role.constant';
-import { UserCreatedEvent } from './events/user.event';
+import { ProfileEntity } from '../profile/entities/profile.entity';
 
 @Injectable()
 export class UserService {
@@ -16,6 +16,8 @@ export class UserService {
     private userRepository: Repository<User>,
     @InjectRepository(RoleEntity)
     private roleRepository: Repository<RoleEntity>,
+    @InjectRepository(ProfileEntity)
+    private profileRepository: Repository<ProfileEntity>,
   ) {}
 
   async create(username: string, email: string, password: string) {
@@ -29,15 +31,19 @@ export class UserService {
 
     const savedUser = await this.userRepository.save(user);
 
-    this.eventEmitter.emit(
-      'user.created',
-      new UserCreatedEvent({
-        userId: user.id,
-        payload: user,
-      }),
-    );
+    const userProfile = this.profileRepository.create({
+      username: savedUser.username,
+      user: savedUser,
+    });
 
-    return savedUser;
+    await this.profileRepository.save(userProfile);
+
+    const userWithProfile = await this.userRepository.findOne({
+      where: { id: savedUser.id },
+      relations: ['profile', 'roles'],
+    });
+
+    return userWithProfile;
   }
 
   findOne(id: number) {

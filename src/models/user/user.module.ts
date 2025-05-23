@@ -8,10 +8,12 @@ import { UserController } from './user.controller';
 import { CurrentUserMiddleware } from './middlewares/current-user.middleware';
 import { RoleModule } from '../role/role.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ProfileService } from '../profile/profile.service';
+import { ProfileEntity } from '../profile/entities/profile.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, ProfileEntity]),
     RoleModule,
     JwtModule.register({
       global: true,
@@ -20,7 +22,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService],
+  providers: [UserService, AuthService, ProfileService],
 })
 export class UserModule {
   configure(consumer: MiddlewareConsumer) {

@@ -31,7 +31,7 @@ export class UserController {
   ) {}
 
   @Post('/register')
-  @Serialize(RegisteredUserDto)
+  @Serialize(AuthUserDto)
   async createUser(@Body() body: CreateUserDto, @Session() session: any) {
     const { email, password, username } = body.user;
     const registeredUser = await this.authService.register(
@@ -39,6 +39,7 @@ export class UserController {
       email,
       password,
     );
+    
     session.userId = registeredUser.id;
     return { user: registeredUser };
   }
