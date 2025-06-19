@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -99,6 +100,8 @@ export class ArticleService {
       };
     });
 
+    console.log({ user, results });
+
     return {
       articles: results,
       articlesCount: count,
@@ -166,8 +169,14 @@ export class ArticleService {
       relations: ['favoritedBy', 'author', 'author.profile', 'tags'],
     });
 
+    article.author.id
+
     if (!article) {
       throw new NotFoundException(`Article ${slug} not found`);
+    }
+
+    if(article.author.id === user.id) {
+      throw new ForbiddenException("You can't favorite your own article");
     }
 
     const userWithFavorited = await this.userRepository.findOne({
