@@ -89,8 +89,9 @@ export class ArticleService {
     const [articles, count] = await queryBuilder.getManyAndCount();
 
     const results = articles.map((article) => {
-      const isFavorited =
-        Array.isArray(article.favoritedBy) && article.favoritedBy.length > 0;
+      const isFavorited = user
+        ? Array.isArray(article.favoritedBy) && article.favoritedBy.length > 0
+        : false;
 
       return {
         ...article,
