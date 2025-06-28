@@ -12,10 +12,10 @@ export class ProfileService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findOne(username: string, user: User) {
-    const follower = await this.userRepository.findOne({
-      where: { id: user.id },
-    });
+  async findOne(username: string, user?: User) {
+    const follower = user
+      ? await this.userRepository.findOne({ where: { id: user.id } })
+      : null;
 
     const following = await this.userRepository.findOne({
       where: { username },
@@ -28,7 +28,7 @@ export class ProfileService {
       username: profileUsername,
       bio,
       image,
-      following: this.isFollowing(follower, following),
+      following: follower ? this.isFollowing(follower, following) : false,
     };
   }
 
