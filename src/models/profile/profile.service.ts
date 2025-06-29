@@ -19,16 +19,23 @@ export class ProfileService {
 
     const following = await this.userRepository.findOne({
       where: { username },
-      relations: ['profile', 'followers'],
+      relations: ['profile', 'followers', 'followers.profile'],
     });
 
     const { username: profileUsername, bio, image } = following.profile;
+
+    const followers = following.followers.map(({ profile }) => ({
+      username: profile.username,
+      bio: profile.bio,
+      image: profile.image,
+    }));
 
     return {
       username: profileUsername,
       bio,
       image,
       following: follower ? this.isFollowing(follower, following) : false,
+      followers,
     };
   }
 

@@ -12,6 +12,9 @@ export class ProfileDataDto {
 
   @Expose()
   following: boolean;
+
+  @Expose()
+  followers: Partial<ProfileDataDto>[];
 }
 
 export class ProfileDto {
