@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { NestExpressApplication } from "@nestjs/platform-express"
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -10,10 +10,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   app.set('trust proxy', 1);
 
-  const cors_origin = process.env.LOCAL_CLIENT;
+  const cors_origin_local_client = process.env.LOCAL_CLIENT_ORIGIN;
+  const cors_origin_sophon_client = process.env.SOPHON_CLIENT_ORIGIN;
 
   app.enableCors({
-    origin: [cors_origin],
+    origin: [cors_origin_local_client, cors_origin_sophon_client],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
