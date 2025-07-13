@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
@@ -11,7 +10,6 @@ import { ProfileEntity } from '../profile/entities/profile.entity';
 @Injectable()
 export class UserService {
   constructor(
-    private eventEmitter: EventEmitter2,
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(RoleEntity)

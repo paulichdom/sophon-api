@@ -2,6 +2,9 @@ import { Expose, Transform, Type } from 'class-transformer';
 
 export class AuthUserData {
   @Expose()
+  id: number;
+
+  @Expose()
   email: string;
 
   @Expose()
