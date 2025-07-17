@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
@@ -6,6 +6,10 @@ import { User } from './entities/user.entity';
 import { RoleEntity } from '../role/entities/role.entity';
 import { Role } from '../../common/constants/role.constant';
 import { ProfileEntity } from '../profile/entities/profile.entity';
+import { randomBytes, scrypt as _scrypt } from 'crypto';
+import { promisify } from 'util';
+
+const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class UserService {
@@ -98,7 +102,23 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
+    if ('email' in attrs && attrs.email) {
+      // Check if the email is already in use by another user
+      const usersByEmail = await this.find(attrs.email);
+      const emailInUse = usersByEmail.some((u: User) => u.id !== id);
+      if (emailInUse) {
+        throw new BadRequestException('Email is already in use');
+      }
+    }
+
+    if ('password' in attrs && attrs.password) {
+      const salt = randomBytes(8).toString('hex');
+      const hash = (await scrypt(attrs.password, salt, 32)) as Buffer;
+      attrs.password = salt + '.' + hash.toString('hex');
+    }
+
     Object.assign(user, attrs);
+
     return this.userRepository.save(user);
   }
 
