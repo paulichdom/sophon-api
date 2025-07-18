@@ -5,6 +5,8 @@ import {
   Param,
   Post,
   UseGuards,
+  Body,
+  Patch,
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
@@ -12,6 +14,7 @@ import { ProfileDto } from './dto/profile.dto';
 import { CurrentUser } from '../user/decorators/current-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Controller('profiles')
 export class ProfileController {
@@ -44,5 +47,20 @@ export class ProfileController {
   ) {
     const unfollowProfile = await this.profileService.unfollow(username, user);
     return { profile: unfollowProfile };
+  }
+
+  @Patch('edit')
+  @UseGuards(AuthGuard)
+  @Serialize(ProfileDto)
+  async updateProfile(
+    @CurrentUser() user: User,
+    @Body()
+    updateProfileDto: UpdateProfileDto,
+  ) {
+    const updatedProfile = await this.profileService.updateProfile(
+      user.id,
+      updateProfileDto,
+    );
+    return { profile: { ...updatedProfile } };
   }
 }

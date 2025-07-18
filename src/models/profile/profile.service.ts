@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EntityManager } from 'typeorm';
 import { User } from '../user/entities/user.entity';
+import { ProfileEntity } from './entities/profile.entity';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class ProfileService {
@@ -10,6 +12,8 @@ export class ProfileService {
     private readonly entityManager: EntityManager,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(ProfileEntity)
+    private profileRepository: Repository<ProfileEntity>,
   ) {}
 
   async findOne(username: string, user?: User) {
@@ -186,5 +190,47 @@ export class ProfileService {
     return following.followers.some(
       (followerEntity) => followerEntity.id === follower.id,
     );
+  }
+
+  async updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
+    const { profile: updateProfileData } = updateProfileDto;
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['profile'],
+    });
+
+    if (!user || !user.profile) {
+      throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+    }
+
+    const profile = user.profile;
+
+    if (updateProfileData.username !== undefined) {
+      const existingUserame = await this.profileRepository.findOne({
+        where: { username: updateProfileData.username },
+      });
+
+      if (existingUserame && existingUserame.id !== profile.id) {
+        throw new HttpException(
+          'Username already exists',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      profile.username = updateProfileData.username;
+      user.username = updateProfileData.username;
+    }
+    if (updateProfileData.bio !== undefined)
+      profile.bio = updateProfileData.bio;
+    if (updateProfileData.image !== undefined)
+      profile.image = updateProfileData.image;
+
+    await this.profileRepository.save(profile);
+    await this.userRepository.save(user);
+
+    return {
+      username: profile.username,
+      bio: profile.bio,
+      image: profile.image,
+    };
   }
 }
