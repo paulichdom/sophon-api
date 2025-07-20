@@ -26,6 +26,10 @@ export class ProfileService {
       relations: ['profile', 'followers', 'followers.profile'],
     });
 
+    if(!following) {
+      throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+    }
+
     const { username: profileUsername, bio, image } = following.profile;
 
     const followers = following.followers.map(({ profile }) => ({
